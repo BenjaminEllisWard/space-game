@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//Ben
 
 namespace SpaceGame
 {
@@ -155,7 +156,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                ErrorMessage();
+                tradeError();
             }
         }
         private void ErrorMessage()
@@ -246,7 +247,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                ErrorMessage();
+                tradeError();
             }
 
         }
@@ -274,7 +275,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                ErrorMessage();
+                tradeError();
             }
         }
         private void mpBuyMenu()
@@ -301,7 +302,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                ErrorMessage();
+                tradeError();
             }
         }
         private void buyEarthItem()
@@ -349,7 +350,7 @@ namespace SpaceGame
                     sellMpMenu();
                     break;
                 default:
-                    deathCheck();
+                    tradeError();
                     break;
             }
         }
@@ -369,8 +370,7 @@ namespace SpaceGame
             }
             catch (Exception ex)
             {
-                ErrorMessage();
-                mainMenu();
+                tradeError();
             }
         }
         private void sellEarth(int action)
@@ -414,9 +414,7 @@ namespace SpaceGame
                     }
                     break;
                 default:
-                    Console.WriteLine();
-                    Console.WriteLine("You do not have that item to sell");
-                    deathCheck();
+                    tradeError();
                     break;
             }
         }
@@ -435,8 +433,7 @@ namespace SpaceGame
             }
             catch (Exception ex)
             {
-                ErrorMessage();
-                mainMenu();
+                tradeError();
             }
         }
         private void sellAc(int action)
@@ -481,8 +478,7 @@ namespace SpaceGame
                     break;
                 default:
                     Console.WriteLine();
-                    Console.WriteLine("You do not have that item to sell");
-                    deathCheck();
+                    tradeError();
                     break;
             }
         }
@@ -501,7 +497,7 @@ namespace SpaceGame
             }
             catch (Exception ex)
             {
-                ErrorMessage();
+                tradeError();
                 mainMenu();
             }
         }
@@ -547,8 +543,7 @@ namespace SpaceGame
                     break;
                 default:
                     Console.WriteLine();
-                    Console.WriteLine("You do not have that item to sell");
-                    deathCheck();
+                    tradeError();
                     break;
             }
         }
@@ -557,6 +552,12 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("You do not have that item to sell.");
             deathCheck();
+        }
+        private void tradeError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("You did not pick a valid option.");
+            trade();
         }
         private void endScreen()
         {
