@@ -59,24 +59,26 @@ namespace SpaceGame
                         break;
 
                     default:
-                        ErrorMessage();
+                        mainError();
                         break;
                 }
             }
             catch (Exception)
             {
-                ErrorMessage();
+                mainError();
             }
         }
         public void travel()
         {
             Console.WriteLine("Where would you like to go?");
-            Console.WriteLine("1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet");
+            Console.WriteLine("1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet, 4 = Stay here");
+            Console.WriteLine();
             try
             {
                 switch (int.Parse(Console.ReadLine()))
                 {
                     case 1:
+                        Console.WriteLine();
                         Console.WriteLine("You have arrived at Earth");
                         if (location == 1)
                         {
@@ -90,6 +92,7 @@ namespace SpaceGame
                         location = 0;
                         break;
                     case 2:
+                        Console.WriteLine();
                         Console.WriteLine("You have arrived at Alpha Centauri.");
                         if (location == 0)
                         {
@@ -103,6 +106,7 @@ namespace SpaceGame
                         location = 1;
                         break;
                     case 3:
+                        Console.WriteLine();
                         Console.WriteLine("You have arrived at Mystery Planet.");
                         if (location == 0)
                         {
@@ -115,13 +119,16 @@ namespace SpaceGame
                         else { }
                         location = 2;
                         break;
+                    case 4:
+                        Console.WriteLine();
+                        mainMenu();
+                        break;
                     default:
                         ErrorMessage();
                         break;
                 }
                 Console.WriteLine();
                 Console.WriteLine($"Your fuel level is: {fuel}/1000. Think about refueling this stop.");
-                Console.WriteLine();
                 deathCheck();
             }
             catch (Exception)
@@ -150,7 +157,7 @@ namespace SpaceGame
                         break;
 
                     default:
-                        ErrorMessage();
+                        tradeError();
                         break;
                 }
             }
@@ -228,6 +235,7 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
             Console.WriteLine("1 = Earth item, 2 = Fuel");
+            Console.WriteLine();
             try
             {
                 switch (int.Parse(Console.ReadLine()))
@@ -239,7 +247,7 @@ namespace SpaceGame
                         buyFuel();
                         break;
                     default:
-                        ErrorMessage();
+                        tradeError();
                         break;
                 }
                 Console.WriteLine();
@@ -256,6 +264,7 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
             Console.WriteLine("1 = Ac item, 2 = Fuel");
+            Console.WriteLine();
             try
             {
                 switch (int.Parse(Console.ReadLine()))
@@ -267,7 +276,7 @@ namespace SpaceGame
                         buyFuel();
                         break;
                     default:
-                        ErrorMessage();
+                        tradeError();
                         break;
                 }
                 Console.WriteLine();
@@ -283,6 +292,7 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
             Console.WriteLine("1 = Mp item, 2 = Fuel");
+            Console.WriteLine();
             try
             {
                 switch (int.Parse(Console.ReadLine()))
@@ -294,7 +304,7 @@ namespace SpaceGame
                         buyFuel();
                         break;
                     default:
-                        ErrorMessage();
+                        tradeError();
                         break;
                 }
                 Console.WriteLine();
@@ -307,25 +317,51 @@ namespace SpaceGame
         }
         private void buyEarthItem()
         {
-            credits -= 200;
-            earthItem += 1;
-            cargoWeight += 150;
-            Console.WriteLine($"Item purchased. Current credits = {credits}.");
-            deathCheck();
+            if (cargoWeight < 851)
+            {
+                credits -= 200;
+                earthItem += 1;
+                cargoWeight += 150;
+                Console.WriteLine();
+                Console.WriteLine($"Item purchased. Current credits = {credits}.");
+                deathCheck();
+            }
+            else
+            {
+                weightError();
+            }
         }
         private void buyAcItem()
         {
-            credits -= 200;
-            acItem += 1;
-            cargoWeight += 150;
-            deathCheck();
+            if (cargoWeight < 851)
+            {
+                credits -= 200;
+                acItem += 1;
+                cargoWeight += 150;
+                Console.WriteLine();
+                Console.WriteLine($"Item purchased. Current credits = {credits}.");
+                deathCheck();
+            }
+            else
+            {
+                weightError();
+            }
         }
         private void buyMpItem()
         {
-            credits -= 200;
-            mpItem += 1;
-            cargoWeight += 150;
-            deathCheck();
+            if (cargoWeight < 851)
+            {
+                credits -= 200;
+                mpItem += 1;
+                cargoWeight += 150;
+                Console.WriteLine();
+                Console.WriteLine($"Item purchased. Current credits = {credits}.");
+                deathCheck();
+            }
+            else
+            {
+                weightError();
+            }
         }
         private void buyFuel()
         {
@@ -383,6 +419,8 @@ namespace SpaceGame
                         credits += 150;
                         earthItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -395,6 +433,8 @@ namespace SpaceGame
                         credits += 250;
                         acItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -407,6 +447,8 @@ namespace SpaceGame
                         credits += 275;
                         mpItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -425,6 +467,7 @@ namespace SpaceGame
             Console.WriteLine("1 = earthItem for 275 credits");
             Console.WriteLine("2 = acItem for 150 credits");
             Console.WriteLine("3 = mpItem for 250 credits");
+            Console.WriteLine();
             try
             {
 
@@ -446,6 +489,8 @@ namespace SpaceGame
                         credits += 275;
                         earthItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -458,6 +503,8 @@ namespace SpaceGame
                         credits += 150;
                         acItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -470,6 +517,8 @@ namespace SpaceGame
                         credits += 250;
                         mpItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -489,6 +538,7 @@ namespace SpaceGame
             Console.WriteLine("1 = earthItem for 250 credits");
             Console.WriteLine("2 = acItem for 275 credits");
             Console.WriteLine("3 = mpItem for 150 credits");
+            Console.WriteLine();
             try
             {
 
@@ -511,6 +561,8 @@ namespace SpaceGame
                         credits += 250;
                         earthItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -523,6 +575,8 @@ namespace SpaceGame
                         credits += 275;
                         acItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -535,6 +589,8 @@ namespace SpaceGame
                         credits += 150;
                         mpItem -= 1;
                         cargoWeight -= 150;
+                        Console.WriteLine();
+                        Console.WriteLine($"Item sold. Credits = {credits}");
                     }
                     else
                     {
@@ -547,6 +603,13 @@ namespace SpaceGame
                     break;
             }
         }
+        private void mainError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid input");
+            Console.WriteLine();
+            mainMenu();
+        }
         private void sellError()
         {
             Console.WriteLine();
@@ -558,6 +621,12 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("You did not pick a valid option.");
             trade();
+        }
+        private void weightError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Your cargo is full. Go sell something.");
+            deathCheck();
         }
         private void endScreen()
         {
