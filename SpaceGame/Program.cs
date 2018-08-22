@@ -173,6 +173,7 @@ namespace SpaceGame
             Console.WriteLine($" Fuel Level = {Convert.ToInt32(fuel)}");
             Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
             Console.WriteLine($" Location = {location}");
+            Console.WriteLine($" Years Passed = {(Convert.ToUInt32(40 - yearsLeft))}");
             Console.WriteLine();
             Convert.ToDouble(fuel);
             mainMenu();
@@ -183,7 +184,7 @@ namespace SpaceGame
             Console.WriteLine($"Earth items: {earthItem}");
             Console.WriteLine($"Ac items: {acItem}");
             Console.WriteLine($"Mp items: {mpItem}");
-            Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
+            Console.WriteLine($"Cargo Weight = {cargoWeight}/1000");
             Console.WriteLine();
             mainMenu();
         }   // mainMenu()
@@ -668,14 +669,14 @@ namespace SpaceGame
             yearsLeft -= travelDistance / warpSpeed;
             fuelBurn();
             Console.WriteLine($"distance = {travelDistance}");
-            Console.WriteLine($"years left = {yearsLeft}");
+            Console.WriteLine($"years left = {Convert.ToInt32(yearsLeft)}");
             Console.WriteLine($"fuel left = {Convert.ToInt32(fuel)}");
             Convert.ToDouble(fuel);
-            Console.WriteLine($"warpspeed = {warpSpeed}");
+            Console.WriteLine($"Velocity = {Convert.ToInt32(warpSpeed)} Times faster than light speed");
         }   // currentCoords(), sideLength(), distanceCalc(), warpSpeedCalc()
         private void warpSpeedCalc()
         {
-            warpSpeed =  Math.Pow(warpFactor, (10 / 3)) + Math.Pow((10 - warpFactor), (-11 / 3));
+            warpSpeed =  Math.Pow(warpFactor, 3.3333333333) + Math.Pow(10 - warpFactor, -3.6666666666);
         }
         private void warpSelector()
         {
