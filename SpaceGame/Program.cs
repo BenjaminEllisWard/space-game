@@ -12,6 +12,7 @@ namespace SpaceGame
     {
         
         int credits = 1000;
+        int totalCreditsEarned = 0;
         int shipHealth = 1000;
         double fuel = 1000;
         int cargoWeight = 0;
@@ -81,7 +82,7 @@ namespace SpaceGame
         public void travel()
         {
             Console.WriteLine("Where would you like to go?");
-            Console.WriteLine("1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet, 4 = Stay here");
+            Console.WriteLine($"1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet, 4 = Stay here");
             Console.WriteLine();
             try
             {
@@ -172,7 +173,20 @@ namespace SpaceGame
             Console.WriteLine($" Ship Health = {shipHealth}");
             Console.WriteLine($" Fuel Level = {Convert.ToInt32(fuel)}");
             Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
-            Console.WriteLine($" Location = {location}");
+            string locationDisplay;
+            if (location == 0)
+            {
+                locationDisplay = "Earth";
+            }
+            else if (location == 1)
+            {
+                locationDisplay = "Alpha Centauri";
+            }
+            else
+            {
+                locationDisplay = "Mystery Planet";
+            }
+            Console.WriteLine($" Location = {locationDisplay}");
             Console.WriteLine();
             Convert.ToDouble(fuel);
             mainMenu();
@@ -250,7 +264,6 @@ namespace SpaceGame
                         break;
                 }
                 Console.WriteLine();
-                deathCheck();
             }
             catch (Exception)
             {
@@ -279,7 +292,6 @@ namespace SpaceGame
                         break;
                 }
                 Console.WriteLine();
-                deathCheck();
             }
             catch (Exception)
             {
@@ -307,7 +319,6 @@ namespace SpaceGame
                         break;
                 }
                 Console.WriteLine();
-                deathCheck();
             }
             catch (Exception)
             {
@@ -318,6 +329,7 @@ namespace SpaceGame
         {
             if (cargoWeight < 851)
             {
+                
                 credits -= 200;
                 earthItem += 1;
                 cargoWeight += 150;
@@ -417,10 +429,12 @@ namespace SpaceGame
                     if (earthItem > 0)
                     {
                         credits += 150;
+                        totalCreditsEarned += 150;
                         earthItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -431,10 +445,12 @@ namespace SpaceGame
                     if (acItem > 0)
                     {
                         credits += 250;
+                        totalCreditsEarned += 250;
                         acItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -445,10 +461,12 @@ namespace SpaceGame
                     if (mpItem > 0)
                     {
                         credits += 275;
+                        totalCreditsEarned += 275;
                         mpItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -487,10 +505,12 @@ namespace SpaceGame
                     if (earthItem > 0)
                     {
                         credits += 275;
+                        totalCreditsEarned += 275;
                         earthItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -501,10 +521,12 @@ namespace SpaceGame
                     if (acItem > 0)
                     {
                         credits += 150;
+                        totalCreditsEarned += 150;
                         acItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -515,10 +537,12 @@ namespace SpaceGame
                     if (mpItem > 0)
                     {
                         credits += 250;
+                        totalCreditsEarned += 250;
                         mpItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -559,10 +583,12 @@ namespace SpaceGame
                     if (earthItem > 0)
                     {
                         credits += 250;
+                        totalCreditsEarned += 250;
                         earthItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -573,10 +599,12 @@ namespace SpaceGame
                     if (acItem > 0)
                     {
                         credits += 275;
+                        totalCreditsEarned += 275;
                         acItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -587,10 +615,12 @@ namespace SpaceGame
                     if (mpItem > 0)
                     {
                         credits += 150;
+                        totalCreditsEarned += 150;
                         mpItem -= 1;
                         cargoWeight -= 150;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
+                        mainMenu();
                     }
                     else
                     {
@@ -621,7 +651,7 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("You did not pick a valid option.");
             trade();
-        }   // trade()
+        }   // trade()       
         private void weightError()
         {
             Console.WriteLine();
@@ -630,6 +660,9 @@ namespace SpaceGame
         }   // deathCheck()
         private void endScreen() // needs additional features for end credits requirements
         {
+            Console.WriteLine($"Credits: {credits}");
+            Console.WriteLine($"Total credits earned: {totalCreditsEarned}");
+            Console.WriteLine($"Time traveled: {40 - yearsLeft}");
             Console.WriteLine("End of game.");
         }
         private void currentCoords()
@@ -675,7 +708,7 @@ namespace SpaceGame
         }   // currentCoords(), sideLength(), distanceCalc(), warpSpeedCalc()
         private void warpSpeedCalc()
         {
-            warpSpeed =  Math.Pow(warpFactor, (10 / 3)) + Math.Pow((10 - warpFactor), (-11 / 3));
+            warpSpeed =  Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
         }
         private void warpSelector()
         {
@@ -709,7 +742,25 @@ namespace SpaceGame
         private void fuelBurn()
         {
             fuelEfficiency();
-            fuel -= efficiency * travelDistance;
+            Console.WriteLine($"This trip will cost you {Convert.ToInt32(efficiency * travelDistance * 10)} fuel and {Convert.ToDecimal(travelDistance / warpSpeed)} years.");
+            Console.WriteLine("Do you wish to proceed?");
+            Console.WriteLine("1 = Yes, 2 = No");
+            try
+            {
+                if (int.Parse(Console.ReadLine()) == 1)
+                {
+
+                }
+                else
+                {
+                    mainMenu();
+                }
+            }
+            catch
+            {
+                mainError();
+            }
+            fuel -= efficiency * travelDistance * 10;
         }   // fuelEfficiency()
     }
 }
