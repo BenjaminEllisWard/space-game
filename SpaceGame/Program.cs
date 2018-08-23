@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SpaceGame
 {
     
-    class Program
+   class Program
     {
         
         int credits = 1000;
@@ -166,7 +166,7 @@ namespace SpaceGame
             Console.WriteLine();
             travel();
         }   // travel()
-        private void checkStatus()
+        public void checkStatus()
         {
             Console.WriteLine();
             Console.WriteLine($" Credits = {credits}");
@@ -247,7 +247,8 @@ namespace SpaceGame
         {
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
-            Console.WriteLine("1 = Earth item, 2 = Fuel");
+            Console.WriteLine("1 = Earth item: 200 credits / each");
+            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
             Console.WriteLine();
             try
             {
@@ -274,8 +275,8 @@ namespace SpaceGame
         private void acBuyMenu()
         {
             Console.WriteLine();
-            Console.WriteLine("What would you like to buy?");
-            Console.WriteLine("1 = Ac item, 2 = Fuel");
+            Console.WriteLine("1 = Ac Item: 200 credits / each");
+            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
             Console.WriteLine();
             try
             {
@@ -301,8 +302,8 @@ namespace SpaceGame
         private void mpBuyMenu()
         {
             Console.WriteLine();
-            Console.WriteLine("What would you like to buy?");
-            Console.WriteLine("1 = Mp item, 2 = Fuel");
+            Console.WriteLine("1 = Mp item: 200 credits / each");
+            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
             Console.WriteLine();
             try
             {
@@ -327,12 +328,13 @@ namespace SpaceGame
         }   // buyMpItem(), buyFuel(), tradeError(), deathCheck(), tradeError()
         private void buyEarthItem()
         {
-            if (cargoWeight < 851)
+            Console.WriteLine("How many would you like to buy");
+            int quantity = setQuantity();
+            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                
-                credits -= 200;
-                earthItem += 1;
-                cargoWeight += 150;
+                credits -= 200 * quantity;
+                earthItem += 1 * quantity;
+                cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
                 deathCheck();
@@ -344,11 +346,13 @@ namespace SpaceGame
         }   // deathCheck(), weightError()
         private void buyAcItem()
         {
-            if (cargoWeight < 851)
+            Console.WriteLine("How many would you like to buy");
+            int quantity = setQuantity();
+            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                credits -= 200;
-                acItem += 1;
-                cargoWeight += 150;
+                credits -= 200 * quantity;
+                acItem += 1 * quantity;
+                cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
                 deathCheck();
@@ -360,11 +364,13 @@ namespace SpaceGame
         }      // deathCheck(), weightError()
         private void buyMpItem()
         {
-            if (cargoWeight < 851)
+            Console.WriteLine("How many would you like to buy");
+            int quantity = setQuantity();
+            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                credits -= 200;
-                mpItem += 1;
-                cargoWeight += 150;
+                credits -= 200 * quantity;
+                mpItem += 1 * quantity;
+                cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
                 deathCheck();
@@ -383,7 +389,7 @@ namespace SpaceGame
             Console.WriteLine($"Fuel = {Convert.ToInt32(fuel)}.");
             Convert.ToDouble(fuel);
             deathCheck();
-        }   // deathCheck()
+        }   // deathCheck()  // needs buy in multiples ability
         private void sellMenuSelector()
         {
             switch (location)
@@ -423,15 +429,17 @@ namespace SpaceGame
         }   //sellEarth(), tradeError()
         private void sellEarth(int action)
         {
+            Console.WriteLine("How many would you like to sell?");
+            int quantity = setQuantity();
             switch (action)
             {
                 case 1:
-                    if (earthItem > 0)
+                    if (earthItem >= quantity)
                     {
-                        credits += 150;
-                        totalCreditsEarned += 150;
-                        earthItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 150 * quantity;
+                        totalCreditsEarned += 150 * quantity;
+                        earthItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -442,12 +450,12 @@ namespace SpaceGame
                     }
                     break;
                 case 2:
-                    if (acItem > 0)
+                    if (acItem >= quantity)
                     {
-                        credits += 250;
-                        totalCreditsEarned += 250;
-                        acItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 250 * quantity;
+                        totalCreditsEarned += 250 * quantity;
+                        acItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -458,12 +466,12 @@ namespace SpaceGame
                     }
                     break;
                 case 3:
-                    if (mpItem > 0)
+                    if (mpItem >= quantity)
                     {
-                        credits += 275;
-                        totalCreditsEarned += 275;
-                        mpItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 275 * quantity;
+                        totalCreditsEarned += 275 * quantity;
+                        mpItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -499,15 +507,17 @@ namespace SpaceGame
         }   //sellAc(), tradeError()
         private void sellAc(int action)
         {
+            Console.WriteLine("How many would you like to sell?");
+            int quantity = setQuantity();
             switch (action)
             {
                 case 1:
-                    if (earthItem > 0)
+                    if (earthItem >= quantity)
                     {
-                        credits += 275;
-                        totalCreditsEarned += 275;
-                        earthItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 275 * quantity;
+                        totalCreditsEarned += 275 * quantity;
+                        earthItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -518,12 +528,12 @@ namespace SpaceGame
                     }
                     break;
                 case 2:
-                    if (acItem > 0)
+                    if (acItem >= quantity)
                     {
-                        credits += 150;
-                        totalCreditsEarned += 150;
-                        acItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 150 * quantity;
+                        totalCreditsEarned += 150 * quantity;
+                        acItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -534,12 +544,12 @@ namespace SpaceGame
                     }
                     break;
                 case 3:
-                    if (mpItem > 0)
+                    if (mpItem >= quantity)
                     {
-                        credits += 250;
-                        totalCreditsEarned += 250;
-                        mpItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 250 * quantity;
+                        totalCreditsEarned += 250 * quantity;
+                        mpItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -577,15 +587,17 @@ namespace SpaceGame
         }   //sellMp(), tradeError()
         private void sellMp(int action)
         {
+            Console.WriteLine("How many would you like to sell?");
+            int quantity = setQuantity();
             switch (action)
             {
                 case 1:
-                    if (earthItem > 0)
+                    if (earthItem >= quantity)
                     {
-                        credits += 250;
-                        totalCreditsEarned += 250;
-                        earthItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 250 * quantity;
+                        totalCreditsEarned += 250 * quantity;
+                        earthItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -596,12 +608,12 @@ namespace SpaceGame
                     }
                     break;
                 case 2:
-                    if (acItem > 0)
+                    if (acItem >= quantity)
                     {
-                        credits += 275;
-                        totalCreditsEarned += 275;
-                        acItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 275 * quantity;
+                        totalCreditsEarned += 275 * quantity;
+                        acItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -612,12 +624,12 @@ namespace SpaceGame
                     }
                     break;
                 case 3:
-                    if (mpItem > 0)
+                    if (mpItem >= quantity)
                     {
-                        credits += 150;
-                        totalCreditsEarned += 150;
-                        mpItem -= 1;
-                        cargoWeight -= 150;
+                        credits += 150 * quantity;
+                        totalCreditsEarned += 150 * quantity;
+                        mpItem -= 1 * quantity;
+                        cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
                         mainMenu();
@@ -633,6 +645,12 @@ namespace SpaceGame
                     break;
             }
         }   //sellError(),tradeError()
+        private int setQuantity()
+        {
+            int quantity = 0;
+            Console.WriteLine("Enter a number 1 - 10");
+            return quantity = int.Parse(Console.ReadLine());
+        }
         private void mainError()
         {
             Console.WriteLine();
