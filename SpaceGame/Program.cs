@@ -701,10 +701,10 @@ namespace SpaceGame
             yearsLeft -= travelDistance / warpSpeed;
             fuelBurn();
             Console.WriteLine($"distance = {travelDistance}");
-            Console.WriteLine($"years left = {yearsLeft}");
+            Console.WriteLine($"years left = {Convert.ToInt32(yearsLeft)}");
             Console.WriteLine($"fuel left = {Convert.ToInt32(fuel)}");
             Convert.ToDouble(fuel);
-            Console.WriteLine($"warpspeed = {warpSpeed}");
+            Console.WriteLine($"Velocity = {Convert.ToInt32(warpSpeed)} Times faster than light speed");
         }   // currentCoords(), sideLength(), distanceCalc(), warpSpeedCalc()
         private void warpSpeedCalc()
         {
