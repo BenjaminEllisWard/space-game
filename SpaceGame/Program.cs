@@ -15,6 +15,7 @@ namespace SpaceGame
         int totalCreditsEarned = 0;
         int shipHealth = 1000;
         double fuel = 1000;
+        int fuelCapacity = 1000;
         int cargoWeight = 0;
         int cargoCapacity = 1000;
         double yearsLeft = 40;
@@ -37,47 +38,55 @@ namespace SpaceGame
         int acItem = 0;
         int mpItem = 0;
 
+        int ship = 0;   // determines your current ship
+
         bool dead = false;          // used to reinitiate mainMenu loop throughout game duration
+
+        /*--------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
         static void Main(string[] args)
         {
             (new Program()).run();
-            
         }
 
         // general methods
         private void run()
         {
-            Console.WriteLine("This is an introduction message that gives an introduction to the game. " +
+            Console.WriteLine("This message gives an introduction to the game. " +
                               "Edit the text in the run() method to alter this message.");
             Console.WriteLine();
-            
+            Console.WriteLine("You are in space. You are in a spaceship. Go buy things on one planet and sell them on another to make money (credits).");
+            Console.WriteLine("If you run out of fuel, you die. If you run out of money, you die. If 40 years elapse, you die.");
+            Console.WriteLine();
+
             while (dead == false)
             {
                 mainMenu();
                 deathCheck();
             }
-            
+            endScreen();
+            Console.ReadLine();
         }                   // initiates game and contains loop that continues game
         private void deathCheck()
         {
             if (fuel <= 0)
             {
                 dead = true;
+                Console.WriteLine();
                 Console.WriteLine("You're stranded. Aliens are coming to eat you. Try again.");
-                endScreen();
             }
             else if (credits <= 0)
             {
                 dead = true;
+                Console.WriteLine();
                 Console.WriteLine("You may have fuel, but you're broke. You are doomed to wander aimlessly about the universe. Try again.");
-                endScreen();
             }
             else if (yearsLeft <= 0)
             {
                 dead = true;
-                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous career in intergalactic trade, you decide to retire in Florida.");
-                endScreen();
+                Console.WriteLine();
+                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous");
+                Console.WriteLine("career in intergalactic trade, you decide to retire in Florida.");
             }
             //additional condition will go here (years, ship health, etc.)
             else
@@ -99,7 +108,14 @@ namespace SpaceGame
                         warpSelector();
                         break;
                     case 2:
-                        trade();
+                        if (location == 3)
+                        {
+                            buyship();
+                        }
+                        else
+                        {
+                            trade();
+                        }
                         break;
                     case 3:
                         Console.WriteLine();
@@ -123,10 +139,11 @@ namespace SpaceGame
         private void checkResources()
         {
             Console.WriteLine();
-            Console.WriteLine($" Credits = {credits}");
-            Console.WriteLine($" Ship Health = {shipHealth}");
-            Console.WriteLine($" Fuel Level = {(fuel).ToString("F0")}");
+            Console.WriteLine($"      Credits = {credits}");
+            Console.WriteLine($"  Ship Health = {shipHealth}");
+            Console.WriteLine($"   Fuel Level = {(fuel).ToString("F0")}");
             Console.WriteLine($" Cargo Weight = {cargoWeight}/{cargoCapacity}");
+            Console.WriteLine($" Time elapsed = {(40 - yearsLeft).ToString("F2")} of 40 years.");
             string locationDisplay;
             if (location == 0)
             {
@@ -136,27 +153,33 @@ namespace SpaceGame
             {
                 locationDisplay = "Alpha Centauri";
             }
-            else
+            else if (location == 2)
             {
                 locationDisplay = "Mystery Planet";
             }
-            Console.WriteLine($" Location = {locationDisplay}");
+            else
+            {
+                locationDisplay = "Easy Eddie's InterGalactic Garage and Massage Parlor";
+            }
+            Console.WriteLine($"     Location = {locationDisplay}");
             Console.WriteLine();
         }
         private void checkCargo()
         {
             Console.WriteLine();
-            Console.WriteLine($"Earth items: {earthItem}");
-            Console.WriteLine($"Ac items: {acItem}");
-            Console.WriteLine($"Mp items: {mpItem}");
-            Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
+            Console.WriteLine($" Earth items: {earthItem}");
+            Console.WriteLine($"    Ac items: {acItem}");
+            Console.WriteLine($"    Mp items: {mpItem}");
+            Console.WriteLine($"Cargo Weight: {cargoWeight}/{cargoCapacity}");
             Console.WriteLine();
         }
         private void endScreen()
         {
+            Console.WriteLine();
             Console.WriteLine($"Credits: {credits}");
             Console.WriteLine($"Total credits earned: {totalCreditsEarned}");
-            Console.WriteLine($"Time traveled: {(40 - yearsLeft).ToString("F2")}");
+            Console.WriteLine($"Time traveled: {(40 - yearsLeft).ToString("F2")} years");
+            Console.WriteLine();
             Console.WriteLine("End of game.");
         }
         private void mainError()
@@ -170,7 +193,8 @@ namespace SpaceGame
         private void travel()
         {
             Console.WriteLine("Where would you like to go?");
-            Console.WriteLine($"1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet, 4 = Stay here");
+            Console.WriteLine($"1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet");
+            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor, 5 = Stay here");
             Console.WriteLine();
             try
             {
@@ -196,6 +220,12 @@ namespace SpaceGame
                         fuelBurn(option);
                         break;
                     case 4:
+                        x2 = 2;
+                        y2 = 1;
+                        travelCalc();
+                        fuelBurn(option);
+                        break;
+                    case 5:
                         Console.WriteLine();
                         break;
                     default:
@@ -222,6 +252,7 @@ namespace SpaceGame
             try
             {
                 warpFactor = int.Parse(Console.ReadLine());
+                Console.WriteLine();
                 if (warpFactor > 0 && warpFactor <= 10)
                 {
                     travel();
@@ -292,13 +323,19 @@ namespace SpaceGame
             {
                 locationDisplay = "Alpha Centauri";
             }
-            else
+            else if (destination == 3)
             {
                 locationDisplay = "Mystery Planet";
             }
+            else
+            {
+                locationDisplay = "Easy Eddie's InterGalactic Garage and Massage Parlor";
+            }
+            Console.WriteLine();
             Console.WriteLine($"This trip will cost you {(efficiency * travelDistance * 10).ToString("F0")} fuel and {(travelDistance / warpSpeed).ToString("F2")} years.");
             Console.WriteLine("Do you wish to proceed?");
             Console.WriteLine("1 = Yes, 2 = No");
+            Console.WriteLine();
             try
             {
                 int option = int.Parse(Console.ReadLine());
@@ -310,7 +347,7 @@ namespace SpaceGame
                     Console.WriteLine();
                     Console.WriteLine($"You have arrived at {locationDisplay}.");
                     Console.WriteLine($"{(40 - yearsLeft).ToString("F2")} years have passed since you first left Earth.");
-                    Console.WriteLine($"Your fuel level is: {(fuel).ToString("F0")}/1000. Think about refueling this stop.");
+                    Console.WriteLine($"Your fuel level is: {(fuel).ToString("F0")}/{fuelCapacity}. Think about refueling this stop.");
                     Convert.ToDouble(fuel);
                 }
                 else if (option == 2)
@@ -372,6 +409,9 @@ namespace SpaceGame
                 case 2:
                     mpBuyMenu();
                     break;
+                case 3:
+                    buyship();
+                    break;
                 default:
                     break;
             }
@@ -380,8 +420,8 @@ namespace SpaceGame
         {
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
-            Console.WriteLine("1 = Earth item: 200 credits / each");
-            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
+            Console.WriteLine("1 = Earth item: 175 credits / each");
+            Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
             Console.WriteLine();
             try
             {
@@ -408,8 +448,8 @@ namespace SpaceGame
         private void acBuyMenu()
         {
             Console.WriteLine();
-            Console.WriteLine("1 = Ac Item: 200 credits / each");
-            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
+            Console.WriteLine("1 =    Ac item: 175 credits / each");
+            Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
             Console.WriteLine();
             try
             {
@@ -435,8 +475,8 @@ namespace SpaceGame
         private void mpBuyMenu()
         {
             Console.WriteLine();
-            Console.WriteLine("1 = Mp item: 200 credits / each");
-            Console.WriteLine("2 =       Fuel: 100 credits / 200 units");
+            Console.WriteLine("1 = Mp item: 175 credits / each");
+            Console.WriteLine("2 =    Fuel:  75 credits / 250 units");
             Console.WriteLine();
             try
             {
@@ -461,11 +501,12 @@ namespace SpaceGame
         }
         private void buyEarthItem()
         {
+            Console.WriteLine();
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
             if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                credits -= 200 * quantity;
+                credits -= 175 * quantity;
                 earthItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
@@ -478,11 +519,12 @@ namespace SpaceGame
         }
         private void buyAcItem()
         {
+            Console.WriteLine();
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
             if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                credits -= 200 * quantity;
+                credits -= 175 * quantity;
                 acItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
@@ -495,11 +537,12 @@ namespace SpaceGame
         }
         private void buyMpItem()
         {
+            Console.WriteLine();
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
             if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                credits -= 200 * quantity;
+                credits -= 175 * quantity;
                 mpItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
@@ -512,12 +555,12 @@ namespace SpaceGame
         }
         private void buyFuel()
         {
-            credits -= 100;
-            fuel += 200;
+            credits -= 75;
+            fuel += 250;
+            Console.WriteLine();
             Console.WriteLine("Fuel purchased.");
             Console.WriteLine($"Credits = {credits}.");
             Console.WriteLine($"Fuel = {(fuel).ToString("F0")}.");
-            Convert.ToDouble(fuel);
         }
         private void sellMenuSelector()
         {
@@ -531,6 +574,9 @@ namespace SpaceGame
                     break;
                 case 2:
                     sellMpMenu();
+                    break;
+                case 3:
+                    Console.WriteLine("We don't buy things here.");
                     break;
                 default:
                     tradeError();
@@ -768,6 +814,7 @@ namespace SpaceGame
         {
             int quantity = 0;
             Console.WriteLine("Enter a number 1 - 10");
+            Console.WriteLine();
             return quantity = int.Parse(Console.ReadLine());
         }           // used to return integer quantity of an item that will be bought/sold
         private void sellError()
@@ -785,5 +832,112 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Your cargo is full. Go sell something.");
         }
+
+        //ship stuff
+        private void buyship()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Which ship would you like to buy?");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("1 = A helium baloon                 \"Seriously, don't try to take this");
+            Console.WriteLine("                                     thing into space. And DEFINITELY do");
+            Console.WriteLine("    cost:               10           not try to use warp fuel with it.\"");
+            Console.WriteLine("    Fuel capacity:     100");      
+            Console.WriteLine("    Cargo capacity:    200");      
+            Console.WriteLine();                                  
+            Console.WriteLine();                                  
+            Console.WriteLine();                                  
+            Console.WriteLine("2 = Reasonable Rocketship           \"Comes with a full tank and a 3,000");
+            Console.WriteLine("                                     lightyear, one Pu half-life");
+            Console.WriteLine("    cost:            4,200           warranty. Conditions apply.\"");
+            Console.WriteLine("    Fuel capacity:   1,500");      
+            Console.WriteLine("    Cargo capacity:  3,000");      
+            Console.WriteLine();                                  
+            Console.WriteLine();                                  
+            Console.WriteLine();                                  
+            Console.WriteLine("3 = Malaysia Airlines Flight 370    \"The fabric of both space and time are left");
+            Console.WriteLine("                                     altered in the wake of this craft's journies");
+            Console.WriteLine("    cost:           15,000           into and out of the universe. The passengers");
+            Console.WriteLine("    Fuel capacity:     NaN           on board have been asking repeatedly for");
+            Console.WriteLine("    Cargo capacity: 20,000           \"peanuts and a ginger ale,\" whatever that means.\"");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Select items 1 - 3, or press 4 to do something");
+            Console.WriteLine();
+            shipSelector();
+        }
+        private void shipSelector()
+        {
+            try
+            {
+                int option = int.Parse(Console.ReadLine());
+                if (option == 1 && credits >= 10)
+                {
+                    if (cargoWeight > 200)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        ship = 1;
+                        fuel = 100;
+                        fuelCapacity = 100;
+                        cargoCapacity = 200;
+                        credits -= 10;
+                        Console.WriteLine();
+                        Console.WriteLine("You are now the proud owner of a helium balloon.");
+                    }
+                }
+                else if (option == 2 && credits >= 4200)
+                {
+                    if (cargoWeight > 3000)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        ship = 2;
+                        fuel = 1500;
+                        fuelCapacity = 1500;
+                        cargoCapacity = 3000;
+                        credits -= 4200;
+                        Console.WriteLine();
+                        Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
+                    }
+                }
+                else if (option == 3 && credits >= 15000)
+                {
+                    if (cargoWeight > 20000)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        ship = 2;
+                        fuel = 999999999;
+                        fuelCapacity = 999999999;
+                        cargoCapacity = 20000;
+                        credits -= 15000;
+                        Console.WriteLine();
+                        Console.WriteLine("You are now the Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
+                    }
+                }
+                else
+                {
+                    mainError();
+                }
+            }
+            catch (Exception)
+            {
+                mainError();
+            }
+        } 
     }
 }
