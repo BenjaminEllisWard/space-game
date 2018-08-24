@@ -10,40 +10,81 @@ namespace SpaceGame
     
    class Program
     {
-        
+        // resources and death criteria
         int credits = 1000;
         int totalCreditsEarned = 0;
         int shipHealth = 1000;
         double fuel = 1000;
         int cargoWeight = 0;
-        int location = 0;
-        double x1 = 0; // x1 & y1 are coordinates associated with the players current location.
+        int cargoCapacity = 1000;
+        double yearsLeft = 40;
+        int location = 0;           // This variable changes between 0, 1, and 2 throughout the program, corresponding to Earth, Alpha Centauri, and Mystery Planet respectively.
+
+        // variables for travel calculations
+        double x1 = 0;              // x1 & y1 are coordinates associated with the players current location. Set each time currentCoords() is called.
         double y1 = 0;
-        double x2 = 0; // x2 & y2 are coordinate associated with the travel destination.
+        double x2 = 0;              // x2 & y2 are coordinates associated with the travel destination. Set inside travel().
         double y2 = 0;
-        double side1 = 0;
+        double side1 = 0;           
         double side2 = 0;
         double travelDistance = 0;
         int warpFactor = 1;
         double warpSpeed = 0;
-        double efficiency = 1;
-        double yearsLeft = 40;
+        double efficiency = 1;      // affects fuel burned per distance. Set in fuelEfficiency().
+
+        // trade items
         int earthItem = 0;
         int acItem = 0;
         int mpItem = 0;
+
+        bool dead = false;          // used to reinitiate mainMenu loop throughout game duration
 
         static void Main(string[] args)
         {
             (new Program()).run();
             
         }
+
+        // general methods
         private void run()
         {
             Console.WriteLine("This is an introduction message that gives an introduction to the game. " +
                               "Edit the text in the run() method to alter this message.");
             Console.WriteLine();
-            mainMenu();
-        }
+            
+            while (dead == false)
+            {
+                mainMenu();
+                deathCheck();
+            }
+            
+        }                   // initiates game and contains loop that continues game
+        private void deathCheck()
+        {
+            if (fuel <= 0)
+            {
+                dead = true;
+                Console.WriteLine("You're stranded. Aliens are coming to eat you. Try again.");
+                endScreen();
+            }
+            else if (credits <= 0)
+            {
+                dead = true;
+                Console.WriteLine("You may have fuel, but you're broke. You are doomed to wander aimlessly about the universe. Try again.");
+                endScreen();
+            }
+            else if (yearsLeft <= 0)
+            {
+                dead = true;
+                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous career in intergalactic trade, you decide to retire in Florida.");
+                endScreen();
+            }
+            //additional condition will go here (years, ship health, etc.)
+            else
+            {
+                Console.WriteLine();
+            }
+        }            // checks criteria that will end game
         private void mainMenu()
         {
             Console.WriteLine("What's your next move, Captain?");
@@ -62,7 +103,7 @@ namespace SpaceGame
                         break;
                     case 3:
                         Console.WriteLine();
-                        checkStatus();
+                        checkResources();
                         break;
                     case 4:
                         Console.WriteLine();
@@ -79,57 +120,216 @@ namespace SpaceGame
                 mainError();
             }
         }
-        public void travel()
+        private void checkResources()
+        {
+            Console.WriteLine();
+            Console.WriteLine($" Credits = {credits}");
+            Console.WriteLine($" Ship Health = {shipHealth}");
+            Console.WriteLine($" Fuel Level = {(fuel).ToString("F0")}");
+            Console.WriteLine($" Cargo Weight = {cargoWeight}/{cargoCapacity}");
+            string locationDisplay;
+            if (location == 0)
+            {
+                locationDisplay = "Earth";
+            }
+            else if (location == 1)
+            {
+                locationDisplay = "Alpha Centauri";
+            }
+            else
+            {
+                locationDisplay = "Mystery Planet";
+            }
+            Console.WriteLine($" Location = {locationDisplay}");
+            Console.WriteLine();
+        }
+        private void checkCargo()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Earth items: {earthItem}");
+            Console.WriteLine($"Ac items: {acItem}");
+            Console.WriteLine($"Mp items: {mpItem}");
+            Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
+            Console.WriteLine();
+        }
+        private void endScreen()
+        {
+            Console.WriteLine($"Credits: {credits}");
+            Console.WriteLine($"Total credits earned: {totalCreditsEarned}");
+            Console.WriteLine($"Time traveled: {(40 - yearsLeft).ToString("F2")}");
+            Console.WriteLine("End of game.");
+        }
+        private void mainError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid input");
+            Console.WriteLine();
+        }
+
+        // travel methods
+        private void travel()
         {
             Console.WriteLine("Where would you like to go?");
             Console.WriteLine($"1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet, 4 = Stay here");
             Console.WriteLine();
             try
             {
-                switch (int.Parse(Console.ReadLine()))
+                int option;
+                switch (option = int.Parse(Console.ReadLine()))
                 {
                     case 1:
                         x2 = 0;
                         y2 = 0;
                         travelCalc();
-                        Console.WriteLine();
-                        Console.WriteLine("You have arrived at Earth");
-                        location = 0;
+                        fuelBurn(option);
                         break;
                     case 2:
                         x2 = 0;
                         y2 = -4.367;
                         travelCalc();
-                        Console.WriteLine();
-                        Console.WriteLine("You have arrived at Alpha Centauri.");
-                        location = 1;
+                        fuelBurn(option);
                         break;
                     case 3:
                         x2 = -5;
                         y2 = 4;
                         travelCalc();
-                        Console.WriteLine();
-                        Console.WriteLine("You have arrived at Mystery Planet.");
-                        location = 2;
+                        fuelBurn(option);
                         break;
                     case 4:
                         Console.WriteLine();
-                        mainMenu();
                         break;
                     default:
-                        ErrorMessage();
+                        travelError();
                         break;
                 }
-                Console.WriteLine();
-                Console.WriteLine($"Your fuel level is: {Convert.ToInt32(fuel)}/1000. Think about refueling this stop.");
-                Convert.ToDouble(fuel);
-                deathCheck();
             }
             catch (Exception)
             {
-                ErrorMessage();
+                travelError();
             }
-        }     // mainMenu(), ErrorMessage(), deathCheck(), travelCalc()
+        }
+        private void travelError()
+        {
+            Console.WriteLine("You did not enter a valid destination.");
+            Console.WriteLine();
+            travel();
+        }
+        private void warpSelector()
+        {
+            Console.WriteLine("Select your warp speed, Captain.");
+            Console.WriteLine("Enter a number 1 - 10.");
+            Console.WriteLine();
+            try
+            {
+                warpFactor = int.Parse(Console.ReadLine());
+                if (warpFactor > 0 && warpFactor <= 10)
+                {
+                    travel();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("You must enter a valid warp speed.");
+                    Console.WriteLine();
+                }
+            }
+            catch
+            {
+                mainError();
+            }
+        }
+        private void travelCalc()
+        {
+            currentCoordsCalc();
+            sideLengthCalc();
+            distanceCalc();
+            warpSpeedCalc();
+        }                // used to call all calculation methods at once.
+        private void currentCoordsCalc()
+        {
+            if (location == 0)
+            {
+                x1 = 0;
+                y1 = 0;
+            }
+            else if (location == 1)
+            {
+                x1 = 0;
+                y1 = -4.367;
+            }
+            else
+            {
+                x1 = -5;
+                y1 = 4;
+            }
+        }
+        private void sideLengthCalc()
+        {
+            side1 = x1 - x2;
+            side2 = y1 - y2;
+        }
+        private void distanceCalc()
+        {
+            travelDistance = Math.Sqrt((side1 * side1) + (side2 * side2));
+        }
+        private void warpSpeedCalc()
+        {
+            warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
+        }
+        private void fuelEfficiencyCalc()
+        {
+            efficiency = Math.Pow(warpFactor, 1.5);
+        }
+        private void fuelBurn(int destination)
+        {
+            fuelEfficiencyCalc();
+            string locationDisplay;
+            if (destination == 1)
+            {
+                locationDisplay = "Earth";
+            }
+            else if (destination == 2)
+            {
+                locationDisplay = "Alpha Centauri";
+            }
+            else
+            {
+                locationDisplay = "Mystery Planet";
+            }
+            Console.WriteLine($"This trip will cost you {(efficiency * travelDistance * 10).ToString("F0")} fuel and {(travelDistance / warpSpeed).ToString("F2")} years.");
+            Console.WriteLine("Do you wish to proceed?");
+            Console.WriteLine("1 = Yes, 2 = No");
+            try
+            {
+                int option = int.Parse(Console.ReadLine());
+                if (option == 1)
+                {
+                    fuel -= efficiency * travelDistance * 10;
+                    yearsLeft -= travelDistance / warpSpeed;
+                    location = destination - 1;
+                    Console.WriteLine();
+                    Console.WriteLine($"You have arrived at {locationDisplay}.");
+                    Console.WriteLine($"{(40 - yearsLeft).ToString("F2")} years have passed since you first left Earth.");
+                    Console.WriteLine($"Your fuel level is: {(fuel).ToString("F0")}/1000. Think about refueling this stop.");
+                    Convert.ToDouble(fuel);
+                }
+                else if (option == 2)
+                {
+                    Console.WriteLine(); ;
+                }
+                else
+                {
+                    mainError();
+                }
+            }
+            catch
+            {
+                mainError();
+            }
+
+        }   // prompts user to initiate travel, then subtracts resources
+
+        // trade methods
         private void trade()
         {
             Console.WriteLine();
@@ -147,7 +347,6 @@ namespace SpaceGame
                         sellMenuSelector();
                         break;
                     case 3:
-                        mainMenu();
                         break;
 
                     default:
@@ -159,72 +358,7 @@ namespace SpaceGame
             {
                 tradeError();
             }
-        }     // buyMenu(), sellMenuSelector(), mainMenu(), tradeError()
-        private void ErrorMessage()
-        {
-            Console.WriteLine("You did not enter a valid destination.");
-            Console.WriteLine();
-            travel();
-        }   // travel()
-        public void checkStatus()
-        {
-            Console.WriteLine();
-            Console.WriteLine($" Credits = {credits}");
-            Console.WriteLine($" Ship Health = {shipHealth}");
-            Console.WriteLine($" Fuel Level = {Convert.ToInt32(fuel)}");
-            Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
-            string locationDisplay;
-            if (location == 0)
-            {
-                locationDisplay = "Earth";
-            }
-            else if (location == 1)
-            {
-                locationDisplay = "Alpha Centauri";
-            }
-            else
-            {
-                locationDisplay = "Mystery Planet";
-            }
-            Console.WriteLine($" Location = {locationDisplay}");
-            Console.WriteLine();
-            Convert.ToDouble(fuel);
-            mainMenu();
-        }   // mainMenu()
-        private void checkCargo()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Earth items: {earthItem}");
-            Console.WriteLine($"Ac items: {acItem}");
-            Console.WriteLine($"Mp items: {mpItem}");
-            Console.WriteLine($" Cargo Weight = {cargoWeight}/1000");
-            Console.WriteLine();
-            mainMenu();
-        }   // mainMenu()
-        private void deathCheck()
-        {
-            if (fuel <= 0)
-            {
-                Console.WriteLine("You're stranded. Aliens are coming to eat you. Try again.");
-                endScreen();
-            }
-            else if (credits <= 0)
-            {
-                Console.WriteLine("You may have fuel, but you're broke. You are doomed to wander aimlessly about the universe. Try again.");
-                endScreen();
-            }
-            else if (yearsLeft <= 0)
-            {
-                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous career in intergalactic trade, you decide to retire in Florida.");
-                endScreen();
-            }
-            //additional condition will go here (years, ship health, etc.)
-            else
-            {
-                Console.WriteLine();
-                mainMenu();
-            }
-        }   // mainMenu(), endScreen()
+        }
         private void buyMenu()
         {
             switch (location)
@@ -239,10 +373,9 @@ namespace SpaceGame
                     mpBuyMenu();
                     break;
                 default:
-                    mainMenu();
                     break;
             }
-        }   // earthBuyMenu(), acBuyMenu(), mpBuyMenu(), mainMenu()
+        }
         private void earthBuyMenu()
         {
             Console.WriteLine();
@@ -271,7 +404,7 @@ namespace SpaceGame
                 tradeError();
             }
 
-        }   // buyEarthItem(), buyFuel(), tradeError(), deathCheck(), tradeError()
+        }
         private void acBuyMenu()
         {
             Console.WriteLine();
@@ -298,7 +431,7 @@ namespace SpaceGame
             {
                 tradeError();
             }
-        }   // buyAcItem(), buyFuel(), tradeError(), deathCheck(), tradeError()
+        }
         private void mpBuyMenu()
         {
             Console.WriteLine();
@@ -325,71 +458,67 @@ namespace SpaceGame
             {
                 tradeError();
             }
-        }   // buyMpItem(), buyFuel(), tradeError(), deathCheck(), tradeError()
+        }
         private void buyEarthItem()
         {
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
-            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
                 credits -= 200 * quantity;
                 earthItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
-                deathCheck();
             }
             else
             {
                 weightError();
             }
-        }   // deathCheck(), weightError()
+        }
         private void buyAcItem()
         {
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
-            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
                 credits -= 200 * quantity;
                 acItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
-                deathCheck();
             }
             else
             {
                 weightError();
             }
-        }      // deathCheck(), weightError()
+        }
         private void buyMpItem()
         {
             Console.WriteLine("How many would you like to buy");
             int quantity = setQuantity();
-            if (cargoWeight <= (1000 - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
                 credits -= 200 * quantity;
                 mpItem += 1 * quantity;
                 cargoWeight += 150 * quantity;
                 Console.WriteLine();
                 Console.WriteLine($"Item purchased. Current credits = {credits}.");
-                deathCheck();
             }
             else
             {
                 weightError();
             }
-        }      // deathCheck(), weightError()
+        }
         private void buyFuel()
         {
             credits -= 100;
             fuel += 200;
             Console.WriteLine("Fuel purchased.");
             Console.WriteLine($"Credits = {credits}.");
-            Console.WriteLine($"Fuel = {Convert.ToInt32(fuel)}.");
+            Console.WriteLine($"Fuel = {(fuel).ToString("F0")}.");
             Convert.ToDouble(fuel);
-            deathCheck();
-        }   // deathCheck()  // needs buy in multiples ability
+        }
         private void sellMenuSelector()
         {
             switch (location)
@@ -407,7 +536,7 @@ namespace SpaceGame
                     tradeError();
                     break;
             }
-        }   // sellEarthMenu(), sellAcMenu(), sellMpMenu(), tradeError()
+        }       // used to vary sell prices based on location
         private void sellEarthMenu ()
         {
             Console.WriteLine();
@@ -422,11 +551,11 @@ namespace SpaceGame
                         sellEarth(int.Parse(Console.ReadLine()));
                         
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 tradeError();
             }
-        }   //sellEarth(), tradeError()
+        }
         private void sellEarth(int action)
         {
             Console.WriteLine("How many would you like to sell?");
@@ -442,7 +571,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -458,7 +586,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -474,7 +601,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -485,7 +611,7 @@ namespace SpaceGame
                     tradeError();
                     break;
             }
-        }   //sellError()
+        }
         private void sellAcMenu()
         {
             Console.WriteLine();
@@ -500,11 +626,11 @@ namespace SpaceGame
                 sellAc(int.Parse(Console.ReadLine()));
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 tradeError();
             }
-        }   //sellAc(), tradeError()
+        }
         private void sellAc(int action)
         {
             Console.WriteLine("How many would you like to sell?");
@@ -520,7 +646,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -536,7 +661,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -552,7 +676,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -564,7 +687,7 @@ namespace SpaceGame
                     tradeError();
                     break;
             }
-        }   //sellError()
+        }
         private void sellMpMenu()
         {
             Console.WriteLine();
@@ -579,12 +702,11 @@ namespace SpaceGame
                 sellMp(int.Parse(Console.ReadLine()));
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 tradeError();
-                mainMenu();
             }
-        }   //sellMp(), tradeError()
+        }
         private void sellMp(int action)
         {
             Console.WriteLine("How many would you like to sell?");
@@ -600,7 +722,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -616,7 +737,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -632,7 +752,6 @@ namespace SpaceGame
                         cargoWeight -= 150 * quantity;
                         Console.WriteLine();
                         Console.WriteLine($"Item sold. Credits = {credits}");
-                        mainMenu();
                     }
                     else
                     {
@@ -644,141 +763,27 @@ namespace SpaceGame
                     tradeError();
                     break;
             }
-        }   //sellError(),tradeError()
+        }
         private int setQuantity()
         {
             int quantity = 0;
             Console.WriteLine("Enter a number 1 - 10");
             return quantity = int.Parse(Console.ReadLine());
-        }
-        private void mainError()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Invalid input");
-            Console.WriteLine();
-            mainMenu();
-        }   // mainMenu()
+        }           // used to return integer quantity of an item that will be bought/sold
         private void sellError()
         {
             Console.WriteLine();
             Console.WriteLine("You do not have that item to sell.");
-            deathCheck();
-        }   //deathCheck()
+        }
         private void tradeError()
         {
             Console.WriteLine();
             Console.WriteLine("You did not pick a valid option.");
-            trade();
-        }   // trade()       
+        }      
         private void weightError()
         {
             Console.WriteLine();
             Console.WriteLine("Your cargo is full. Go sell something.");
-            deathCheck();
-        }   // deathCheck()
-        private void endScreen() // needs additional features for end credits requirements
-        {
-            Console.WriteLine($"Credits: {credits}");
-            Console.WriteLine($"Total credits earned: {totalCreditsEarned}");
-            Console.WriteLine($"Time traveled: {40 - yearsLeft}");
-            Console.WriteLine("End of game.");
         }
-        private void currentCoords()
-        {
-            if (location == 0)
-            {
-                x1 = 0;
-                y1 = 0;
-            }
-            else if (location == 1)
-            {
-                x1 = 0;
-                y1 = -4.367;
-            }
-            else
-            {
-                x1 = -5;
-                y1 = 4;
-            }
-        }
-        private void sideLength()
-        {
-            side1 = x1 - x2;
-            side2 = y1 - y2;
-        }
-        private void distanceCalc()
-        {
-            travelDistance = Math.Sqrt((side1 * side1) + (side2 * side2));
-        }
-        private void travelCalc()
-        {
-            currentCoords();
-            sideLength();
-            distanceCalc();
-            warpSpeedCalc();
-            yearsLeft -= travelDistance / warpSpeed;
-            fuelBurn();
-            Console.WriteLine($"distance = {travelDistance}");
-            Console.WriteLine($"years left = {Convert.ToInt32(yearsLeft)}");
-            Console.WriteLine($"fuel left = {Convert.ToInt32(fuel)}");
-            Convert.ToDouble(fuel);
-            Console.WriteLine($"Velocity = {Convert.ToInt32(warpSpeed)} Times faster than light speed");
-        }   // currentCoords(), sideLength(), distanceCalc(), warpSpeedCalc()
-        private void warpSpeedCalc()
-        {
-            warpSpeed =  Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
-        }
-        private void warpSelector()
-        {
-            Console.WriteLine("Select your warp speed, Captain.");
-            Console.WriteLine("Enter a number 1 - 10.");
-            Console.WriteLine();
-            try
-            {
-                warpFactor = int.Parse(Console.ReadLine());
-                if (warpFactor > 0 && warpFactor <= 10)
-                {
-                    travel();
-                }
-                else
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("You must enter a valid warp speed.");
-                    Console.WriteLine();
-                    mainMenu();
-                }
-            }
-            catch
-            {
-                mainError();
-            }
-        }   // travel(), mainMenu(), mainError()
-        private void fuelEfficiency()
-        {
-            efficiency = Math.Pow(warpFactor, 1.5);
-        }
-        private void fuelBurn()
-        {
-            fuelEfficiency();
-            Console.WriteLine($"This trip will cost you {Convert.ToInt32(efficiency * travelDistance * 10)} fuel and {Convert.ToDecimal(travelDistance / warpSpeed)} years.");
-            Console.WriteLine("Do you wish to proceed?");
-            Console.WriteLine("1 = Yes, 2 = No");
-            try
-            {
-                if (int.Parse(Console.ReadLine()) == 1)
-                {
-
-                }
-                else
-                {
-                    mainMenu();
-                }
-            }
-            catch
-            {
-                mainError();
-            }
-            fuel -= efficiency * travelDistance * 10;
-        }   // fuelEfficiency()
     }
 }
