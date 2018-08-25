@@ -97,7 +97,7 @@ namespace SpaceGame
         private void mainMenu()
         {
             Console.WriteLine("What's your next move, Captain?");
-            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check");
+            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Quit Game");
             Console.WriteLine();
             try
             {
@@ -125,7 +125,11 @@ namespace SpaceGame
                         Console.WriteLine();
                         checkCargo();
                         break;
-
+                    case 5:
+                        dead = true;
+                        Console.WriteLine();
+                        Console.WriteLine("You are a quitter.");
+                        break;
                     default:
                         mainError();
                         break;
@@ -144,6 +148,12 @@ namespace SpaceGame
             Console.WriteLine($"   Fuel Level = {(fuel).ToString("F0")}");
             Console.WriteLine($" Cargo Weight = {cargoWeight}/{cargoCapacity}");
             Console.WriteLine($" Time elapsed = {(40 - yearsLeft).ToString("F2")} of 40 years.");
+            Console.WriteLine($"     Location = {locationDisplaySetter()}");
+            Console.WriteLine($"         ship = {shipDisplaySetter()}");
+            Console.WriteLine();
+        }
+        private string locationDisplaySetter()
+        {
             string locationDisplay;
             if (location == 0)
             {
@@ -161,8 +171,28 @@ namespace SpaceGame
             {
                 locationDisplay = "Easy Eddie's InterGalactic Garage and Massage Parlor";
             }
-            Console.WriteLine($"     Location = {locationDisplay}");
-            Console.WriteLine();
+            return locationDisplay;
+        }
+        private string shipDisplaySetter()
+        {
+            string shipName;
+            if (ship == 0)
+            {
+                shipName = "Your Great Start Ship";
+            }
+            else if (ship == 1)
+            {
+                shipName = "A helium balloon";
+            }
+            else if (ship == 2)
+            {
+                shipName = "Reasonable Rocketship";
+            }
+            else
+            {
+                shipName = "Malaysia Airlines Flight 370";
+            }
+            return shipName;
         }
         private void checkCargo()
         {
@@ -920,13 +950,13 @@ namespace SpaceGame
                     }
                     else
                     {
-                        ship = 2;
+                        ship = 3;
                         fuel = 999999999;
                         fuelCapacity = 999999999;
                         cargoCapacity = 20000;
                         credits -= 15000;
                         Console.WriteLine();
-                        Console.WriteLine("You are now the Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
+                        Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
                     }
                 }
                 else
