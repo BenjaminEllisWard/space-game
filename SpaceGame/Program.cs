@@ -585,10 +585,25 @@ namespace SpaceGame
         }
         private void buyFuel()
         {
-            credits -= 75;
-            fuel += 250;
-            Console.WriteLine();
-            Console.WriteLine("Fuel purchased.");
+            if (fuel <= fuelCapacity - 250)
+            {
+                credits -= 75;
+                fuel += 250;
+                Console.WriteLine();
+                Console.WriteLine("Fuel purchased.");
+            }
+            else if (fuel > fuelCapacity - 250 && fuel < fuelCapacity)
+            {
+                credits -= 75;
+                fuel = fuelCapacity;
+                Console.WriteLine();
+                Console.WriteLine("Fuel purchased.");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("You're tank is full");
+            }
             Console.WriteLine($"Credits = {credits}.");
             Console.WriteLine($"Fuel = {(fuel).ToString("F0")}.");
         }
