@@ -4,402 +4,99 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace SpaceGame
 {
-
     class Program
     {
-        // resources and death criteria
-        int credits = 1000;
-        int totalCreditsEarned = 0;
-        int shipHealth = 1000;
-        double fuel = 1000;
-        int fuelCapacity = 1000;
-        int cargoWeight = 0;
-        int cargoCapacity = 1000;
-        double yearsLeft = 40;
-        int location = 0;           // This variable changes between 0, 1, and 2 throughout the program, corresponding to Earth, Alpha Centauri, and Mystery Planet respectively.
-
-        // variables for travel calculations
-        double x1 = 0;              // x1 & y1 are coordinates associated with the players current location. Set each time currentCoords() is called.
-        double y1 = 0;
-        double x2 = 0;              // x2 & y2 are coordinates associated with the travel destination. Set inside travel().
-        double y2 = 0;
-        double side1 = 0;
-        double side2 = 0;
-        double travelDistance = 0;
-        int warpFactor = 1;
-        double warpSpeed = 0;
-        double efficiency = 1;      // affects fuel burned per distance. Set in fuelEfficiency().
-
-        // trade items
-        int earthItem = 0;
-        int acItem = 0;
-        int mpItem = 0;
-
-        int ship = 0;   // determines your current ship
-
-        bool dead = false;          // used to reinitiate mainMenu loop throughout game duration
-
-        /*--------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        static bool Dead = false;
+        static Planet Earth = new Planet();
+        static Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
+        static Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
+        static Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
+        static Ship MyShip = new Ship();
+        Cargo Cargo = new Cargo();
 
         static void Main(string[] args)
         {
             (new Program()).run();
         }
 
-        // general methods
         private void run()
         {
-            Console.WriteLine("This message gives an introduction to the game. " +
-                              "Edit the text in the run() method to alter this message.");
-            Console.WriteLine();
-            Console.WriteLine("You are in space. You are in a spaceship. Go buy things on one planet and sell them on another to make money (credits).");
-            Console.WriteLine("If you run out of fuel, you die. If you run out of money, you die. If 40 years elapse, you die.");
-            Console.WriteLine();
-
-            while (dead == false)
+            while (Dead == false)
             {
                 mainMenu();
-                deathCheck();
             }
-            endScreen();
-            Console.ReadLine();
-        }                   // initiates game and contains loop that continues game
-        private void deathCheck()
-        {
-            if (fuel <= 0)
-            {
-                dead = true;
-                Console.WriteLine();
-                Console.WriteLine("You're stranded. Aliens are coming to eat you. Try again.");
-            }
-            else if (credits <= 0)
-            {
-                dead = true;
-                Console.WriteLine();
-                Console.WriteLine("You may have fuel, but you're broke. You are doomed to wander aimlessly about the universe. Try again.");
-            }
-            else if (yearsLeft <= 0)
-            {
-                dead = true;
-                Console.WriteLine();
-                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous");
-                Console.WriteLine("career in intergalactic trade, you decide to retire in Florida.");
-            }
-            //additional condition will go here (years, ship health, etc.)
-            else
-            {
-                Console.WriteLine();
-            }
-        }            // checks criteria that will end game
+        }
         private void mainMenu()
         {
             Console.WriteLine("What's your next move, Captain?");
             Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Quit Game");
             Console.WriteLine();
-            try
-            {
-                switch (int.Parse(Console.ReadLine()))
-                {
-                    case 1:
-                        Console.WriteLine();
-                        warpSelector();
-                        break;
-                    case 2:
-                        if (location == 3)
-                        {
-                            buyship();
-                        }
-                        else
-                        {
-                            trade();
-                        }
-                        break;
-                    case 3:
-                        Console.WriteLine();
-                        checkResources();
-                        break;
-                    case 4:
-                        Console.WriteLine();
-                        checkCargo();
-                        break;
-                    case 5:
-                        dead = true;
-                        Console.WriteLine();
-                        Console.WriteLine("You are a quitter.");
-                        break;
-                    default:
-                        mainError();
-                        break;
-                }
-            }
-            catch (Exception)
-            {
-                mainError();
-            }
-        }
-        private void checkResources()
-        {
-            Console.Clear();
-            Console.WriteLine($"      Credits = {credits}");
-            Console.WriteLine($"  Ship Health = {shipHealth}");
-            Console.WriteLine($"   Fuel Level = {(fuel).ToString("F0")}");
-            Console.WriteLine($" Cargo Weight = {cargoWeight}/{cargoCapacity}");
-            Console.WriteLine($" Time elapsed = {(40 - yearsLeft).ToString("F2")} of 40 years.");
-            Console.WriteLine($"     Location = {locationDisplaySetter()}");
-            Console.WriteLine($"         ship = {shipDisplaySetter()}");
-            Console.WriteLine();
-        }
-        private string locationDisplaySetter()
-        {
-            string locationDisplay;
-            if (location == 0)
-            {
-                locationDisplay = "Earth";
-            }
-            else if (location == 1)
-            {
-                locationDisplay = "Alpha Centauri";
-            }
-            else if (location == 2)
-            {
-                locationDisplay = "Mystery Planet";
-            }
-            else
-            {
-                locationDisplay = "Easy Eddie's InterGalactic Garage and Massage Parlor";
-            }
-            return locationDisplay;
-        }
-        private string shipDisplaySetter()
-        {
-            string shipName;
-            if (ship == 0)
-            {
-                shipName = "Your Great Start Ship";
-            }
-            else if (ship == 1)
-            {
-                shipName = "A helium balloon";
-            }
-            else if (ship == 2)
-            {
-                shipName = "Reasonable Rocketship";
-            }
-            else
-            {
-                shipName = "Malaysia Airlines Flight 370";
-            }
-            return shipName;
-        }
-        private void checkCargo()
-        {
-            Console.Clear();
-            Console.WriteLine($" Earth items: {earthItem}");
-            Console.WriteLine($"    Ac items: {acItem}");
-            Console.WriteLine($"    Mp items: {mpItem}");
-            Console.WriteLine($"Cargo Weight: {cargoWeight}/{cargoCapacity}");
-            Console.WriteLine();
-        }
-        private void endScreen()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Credits: {credits}");
-            Console.WriteLine($"Total credits earned: {totalCreditsEarned}");
-            Console.WriteLine($"Time traveled: {(40 - yearsLeft).ToString("F2")} years");
-            Console.WriteLine();
-            Console.WriteLine("End of game.");
-        }
-        private void mainError()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Invalid input");
-            Console.WriteLine();
-        }
 
-        // travel methods
-        private void travel()
-        {
-            Console.WriteLine("Where would you like to go?");
-            Console.WriteLine($"1 = Earth, 2 = Alpha Centauri, 3 = Mystery Planet");
-            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor, 5 = Stay here");
-            Console.WriteLine();
             try
             {
                 int option;
-                switch (option = int.Parse(Console.ReadLine()))
+                switch (option = Int32.Parse(Console.ReadLine()))
                 {
                     case 1:
-                        x2 = 0;
-                        y2 = 0;
-                        travelCalc();
-                        fuelBurn(option);
+                        MyShip.Travel(pickPlanet());
                         break;
                     case 2:
-                        x2 = 0;
-                        y2 = -4.367;
-                        travelCalc();
-                        fuelBurn(option);
+                        Trade();
                         break;
                     case 3:
-                        x2 = -5;
-                        y2 = 4;
-                        travelCalc();
-                        fuelBurn(option);
+                        CheckStatus();
                         break;
                     case 4:
-                        x2 = 2;
-                        y2 = 1;
-                        travelCalc();
-                        fuelBurn(option);
+                        Cargo.CheckCargo();
                         break;
                     case 5:
-                        Console.WriteLine();
+                        Dead = true;
                         break;
                     default:
-                        travelError();
+                        Console.WriteLine("Invalid input");
                         break;
                 }
             }
             catch (Exception)
             {
-                travelError();
+                Console.WriteLine("Invalid input");
             }
         }
-        private void travelError()
+        private void CheckStatus()
         {
-            Console.WriteLine("You did not enter a valid destination.");
-            Console.WriteLine();
-            travel();
+            Console.WriteLine($"Location: {MyShip.GetLocation()}");
+            Console.WriteLine($"    Fuel: {MyShip.Fuel}");
+            Console.WriteLine($" Credits: {Cargo.GetCredits()}");
         }
-        private void warpSelector()
+        private Planet pickPlanet()
         {
-            Console.WriteLine("Select your warp speed, Captain.");
-            Console.WriteLine("Enter a number 1 - 10.");
-            Console.WriteLine();
-            try
+            Console.WriteLine("Where would you like to go?");
+            Console.WriteLine("1 = Earth");
+            Console.WriteLine("2 = Alpha Centauri");
+            Console.WriteLine("3 = Mystery Planet");
+            Planet destination = new Planet();
+            int option = int.Parse(Console.ReadLine());
+            switch (option)
             {
-                warpFactor = int.Parse(Console.ReadLine());
-                Console.WriteLine();
-                if (warpFactor > 0 && warpFactor <= 10)
-                {
-                    travel();
-                }
-                else
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("You must enter a valid warp speed.");
-                    Console.WriteLine();
-                }
+                case 1:
+                    destination = Earth;
+                    break;
+                case 2:
+                    destination = AlphaCentauri;
+                    break;
+                case 3:
+                    destination = MysteryPlanet;
+                    break;
+                default:
+                    Console.WriteLine("You must pick a valid destination.");
+                    break;
             }
-            catch
-            {
-                mainError();
-            }
-        }
-        private void travelCalc()
-        {
-            currentCoordsCalc();
-            sideLengthCalc();
-            distanceCalc();
-            warpSpeedCalc();
-        }                // used to call all calculation methods at once.
-        private void currentCoordsCalc()
-        {
-            if (location == 0)
-            {
-                x1 = 0;
-                y1 = 0;
-            }
-            else if (location == 1)
-            {
-                x1 = 0;
-                y1 = -4.367;
-            }
-            else
-            {
-                x1 = -5;
-                y1 = 4;
-            }
-        }
-        private void sideLengthCalc()
-        {
-            side1 = x1 - x2;
-            side2 = y1 - y2;
-        }
-        private void distanceCalc()
-        {
-            travelDistance = Math.Sqrt((side1 * side1) + (side2 * side2));
-        }
-        private void warpSpeedCalc()
-        {
-            warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
-        }
-        private void fuelEfficiencyCalc()
-        {
-            efficiency = Math.Pow(warpFactor, 1.5);
-        }
-        private void fuelBurn(int destination)
-        {
-            fuelEfficiencyCalc();
-            string locationDisplay;
-            if (destination == 1)
-            {
-                locationDisplay = "Earth";
-            }
-            else if (destination == 2)
-            {
-                locationDisplay = "Alpha Centauri";
-            }
-            else if (destination == 3)
-            {
-                locationDisplay = "Mystery Planet";
-            }
-            else
-            {
-                locationDisplay = "Easy Eddie's InterGalactic Garage and Massage Parlor";
-            }
-            Console.WriteLine();
-            Console.WriteLine($"This trip will cost you {(efficiency * travelDistance * 10).ToString("F0")} fuel and {(travelDistance / warpSpeed).ToString("F2")} years.");
-            Console.WriteLine("Do you wish to proceed?");
-            Console.WriteLine("1 = Yes, 2 = No");
-            Console.WriteLine();
-            try
-            {
-                int option = int.Parse(Console.ReadLine());
-                Console.Clear();
-                if (option == 1)
-                {
-                    fuel -= efficiency * travelDistance * 10;
-                    yearsLeft -= travelDistance / warpSpeed;
-                    location = destination - 1;
-                    Console.WriteLine();
-                    Console.WriteLine($"You have arrived at {locationDisplay}.");
-                    Console.WriteLine($"{(40 - yearsLeft).ToString("F2")} years have passed since you first left Earth.");
-                    Console.WriteLine($"Your fuel level is: {(fuel).ToString("F0")}/{fuelCapacity}. Think about refueling this stop.");
-                    Convert.ToDouble(fuel);
-                }
-                else if (option == 2)
-                {
-                    Console.WriteLine(); ;
-                }
-                else
-                {
-                    mainError();
-                }
-            }
-            catch
-            {
-                Console.Clear();
-                mainError();
-            }
+            return destination;
+        }   // selects destination when traveling
 
-        }   // prompts user to initiate travel, then subtracts resources
-
-        // trade methods
-        private void trade()
+        public void Trade()
         {
             Console.WriteLine();
             Console.WriteLine("What would you like to do?");
@@ -410,10 +107,10 @@ namespace SpaceGame
                 switch (int.Parse(Console.ReadLine()))
                 {
                     case 1:
-                        buyMenu();
+                        BuyMenu();
                         break;
                     case 2:
-                        sellMenuSelector();
+                        SellMenu();
                         break;
                     case 3:
                         break;
@@ -428,31 +125,18 @@ namespace SpaceGame
                 tradeError();
             }
         }
-        private void buyMenu()
+        private int SetQuantity()
         {
-            switch (location)
-            {
-                case 0:
-                    earthBuyMenu();
-                    break;
-                case 1:
-                    acBuyMenu();
-                    break;
-                case 2:
-                    mpBuyMenu();
-                    break;
-                case 3:
-                    buyship();
-                    break;
-                    //default:
-                    //    break;
-            }
-        }
-        private void earthBuyMenu()
+            int quantity = 0;
+            Console.WriteLine("Enter a number 1 - 10");
+            Console.WriteLine();
+            return quantity = int.Parse(Console.ReadLine());
+        }           // used to return integer quantity of an item that will be bought/sold
+        private void BuyMenu()
         {
             Console.WriteLine();
             Console.WriteLine("What would you like to buy?");
-            Console.WriteLine("1 = Earth item: 175 credits / each");
+            Console.WriteLine($"1 = {MyShip.GetLocation()} item: 175 credits / each"); // automatically names item in form "{location} + item"
             Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
             Console.WriteLine();
             try
@@ -460,10 +144,10 @@ namespace SpaceGame
                 switch (int.Parse(Console.ReadLine()))
                 {
                     case 1:
-                        buyEarthItem();
+                        BuyItem();
                         break;
                     case 2:
-                        buyFuel();
+                        BuyFuel();
                         break;
                     default:
                         tradeError();
@@ -477,127 +161,30 @@ namespace SpaceGame
             }
 
         }
-        private void acBuyMenu()
-        {
-            Console.WriteLine();
-            Console.WriteLine("1 =    Ac item: 175 credits / each");
-            Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
-            Console.WriteLine();
-            try
-            {
-                switch (int.Parse(Console.ReadLine()))
-                {
-                    case 1:
-                        buyAcItem();
-                        break;
-                    case 2:
-                        buyFuel();
-                        break;
-                    default:
-                        tradeError();
-                        break;
-                }
-                Console.WriteLine();
-            }
-            catch (Exception)
-            {
-                tradeError();
-            }
-        }
-        private void mpBuyMenu()
-        {
-            Console.WriteLine();
-            Console.WriteLine("1 = Mp item: 175 credits / each");
-            Console.WriteLine("2 =    Fuel:  75 credits / 250 units");
-            Console.WriteLine();
-            try
-            {
-                switch (int.Parse(Console.ReadLine()))
-                {
-                    case 1:
-                        buyMpItem();
-                        break;
-                    case 2:
-                        buyFuel();
-                        break;
-                    default:
-                        tradeError();
-                        break;
-                }
-                Console.WriteLine();
-            }
-            catch (Exception)
-            {
-                tradeError();
-            }
-        }
-        private void buyEarthItem()
+        private void BuyItem()
         {
             Console.WriteLine();
             Console.WriteLine("How many would you like to buy");
-            int quantity = setQuantity();
-            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            int quantity = SetQuantity();
+            if (Cargo.GetCargoWeight() <= (Cargo.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)  // enforces cargo capacity
             {
-                credits -= 175 * quantity;
-                earthItem += 1 * quantity;
-                cargoWeight += 150 * quantity;
+                Cargo.ChangeCredits(-175 * quantity);   // deducts credits
+                Cargo.ChangeItem(MyShip.GetItemID(), quantity); // first parameter selects location dependent item
+                Cargo.ChangeWeight(150 * quantity); // adds weight to cargo
                 Console.Clear();
-                Console.WriteLine($"Item purchased. Current credits = {credits}.");
+                Console.WriteLine($"Item purchased. Current credits = {Cargo.GetCredits()}.");
             }
             else
             {
                 weightError();
             }
         }
-        private void buyAcItem()
+        private void BuyFuel()
         {
-            Console.WriteLine();
-            Console.WriteLine("How many would you like to buy");
-            int quantity = setQuantity();
-            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            if (MyShip.GetFuelLevel() < MyShip.GetFuelCapacity())
             {
-                credits -= 175 * quantity;
-                acItem += 1 * quantity;
-                cargoWeight += 150 * quantity;
-                Console.Clear();
-                Console.WriteLine($"Item purchased. Current credits = {credits}.");
-            }
-            else
-            {
-                weightError();
-            }
-        }
-        private void buyMpItem()
-        {
-            Console.WriteLine();
-            Console.WriteLine("How many would you like to buy");
-            int quantity = setQuantity();
-            if (cargoWeight <= (cargoCapacity - (150 * quantity)) && quantity > 0 && quantity <= 10)
-            {
-                credits -= 175 * quantity;
-                mpItem += 1 * quantity;
-                cargoWeight += 150 * quantity;
-                Console.Clear();
-                Console.WriteLine($"Item purchased. Current credits = {credits}.");
-            }
-            else
-            {
-                weightError();
-            }
-        }
-        private void buyFuel()
-        {
-            if (fuel <= fuelCapacity - 250)
-            {
-                credits -= 75;
-                fuel += 250;
-                Console.Clear();
-                Console.WriteLine("Fuel purchased.");
-            }
-            else if (fuel > fuelCapacity - 250 && fuel < fuelCapacity)
-            {
-                credits -= 75;
-                fuel = fuelCapacity;
+                Cargo.ChangeCredits(-75);
+                MyShip.ChangeFuel(250); // fuel capacity enforced within Ship.ChangeFuel()
                 Console.Clear();
                 Console.WriteLine("Fuel purchased.");
             }
@@ -606,282 +193,10 @@ namespace SpaceGame
                 Console.Clear();
                 Console.WriteLine("You're tank is full");
             }
-            Console.WriteLine($"Credits = {credits}.");
-            Console.WriteLine($"Fuel = {(fuel).ToString("F0")}.");
+            Console.WriteLine($"Credits = {Cargo.GetCredits()}");
+            Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
         }
-        private void sellMenuSelector()
-        {
-            switch (location)
-            {
-                case 0:
-                    sellEarthMenu();
-                    break;
-                case 1:
-                    sellAcMenu();
-                    break;
-                case 2:
-                    sellMpMenu();
-                    break;
-                case 3:
-                    Console.WriteLine("We don't buy things here.");
-                    break;
-                default:
-                    tradeError();
-                    break;
-            }
-        }       // used to vary sell prices based on location
-        private void sellEarthMenu()
-        {
-            Console.WriteLine();
-            Console.WriteLine("What would you like to sell?");
-            Console.WriteLine("1 = earthItem for 150 credits");
-            Console.WriteLine("2 = acItem for 250 credits");
-            Console.WriteLine("3 = mpItem for 275 credits");
-            Console.WriteLine();
-            try
-            {
-
-                sellEarth(int.Parse(Console.ReadLine()));
-
-            }
-            catch (Exception)
-            {
-                tradeError();
-            }
-        }
-        private void sellEarth(int action)
-        {
-            Console.WriteLine("How many would you like to sell?");
-            int quantity = setQuantity();
-            switch (action)
-            {
-                case 1:
-                    if (earthItem >= quantity)
-                    {
-                        credits += 150 * quantity;
-                        totalCreditsEarned += 150 * quantity;
-                        earthItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 2:
-                    if (acItem >= quantity)
-                    {
-                        credits += 250 * quantity;
-                        totalCreditsEarned += 250 * quantity;
-                        acItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 3:
-                    if (mpItem >= quantity)
-                    {
-                        credits += 275 * quantity;
-                        totalCreditsEarned += 275 * quantity;
-                        mpItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                default:
-                    tradeError();
-                    break;
-            }
-        }
-        private void sellAcMenu()
-        {
-            Console.WriteLine();
-            Console.WriteLine("What would you like to sell?");
-            Console.WriteLine("1 = earthItem for 275 credits");
-            Console.WriteLine("2 = acItem for 150 credits");
-            Console.WriteLine("3 = mpItem for 250 credits");
-            Console.WriteLine();
-            try
-            {
-
-                sellAc(int.Parse(Console.ReadLine()));
-
-            }
-            catch (Exception)
-            {
-                tradeError();
-            }
-        }
-        private void sellAc(int action)
-        {
-            Console.WriteLine("How many would you like to sell?");
-            int quantity = setQuantity();
-            switch (action)
-            {
-                case 1:
-                    if (earthItem >= quantity)
-                    {
-                        credits += 275 * quantity;
-                        totalCreditsEarned += 275 * quantity;
-                        earthItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 2:
-                    if (acItem >= quantity)
-                    {
-                        credits += 150 * quantity;
-                        totalCreditsEarned += 150 * quantity;
-                        acItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 3:
-                    if (mpItem >= quantity)
-                    {
-                        credits += 250 * quantity;
-                        totalCreditsEarned += 250 * quantity;
-                        mpItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                default:
-                    Console.WriteLine();
-                    tradeError();
-                    break;
-            }
-        }
-        private void sellMpMenu()
-        {
-            Console.WriteLine();
-            Console.WriteLine("What would you like to sell?");
-            Console.WriteLine("1 = earthItem for 250 credits");
-            Console.WriteLine("2 = acItem for 275 credits");
-            Console.WriteLine("3 = mpItem for 150 credits");
-            Console.WriteLine();
-            try
-            {
-
-                sellMp(int.Parse(Console.ReadLine()));
-
-            }
-            catch (Exception)
-            {
-                tradeError();
-            }
-        }
-        private void sellMp(int action)
-        {
-            Console.WriteLine("How many would you like to sell?");
-            int quantity = setQuantity();
-            switch (action)
-            {
-                case 1:
-                    if (earthItem >= quantity)
-                    {
-                        credits += 250 * quantity;
-                        totalCreditsEarned += 250 * quantity;
-                        earthItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 2:
-                    if (acItem >= quantity)
-                    {
-                        credits += 275 * quantity;
-                        totalCreditsEarned += 275 * quantity;
-                        acItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                case 3:
-                    if (mpItem >= quantity)
-                    {
-                        credits += 150 * quantity;
-                        totalCreditsEarned += 150 * quantity;
-                        mpItem -= 1 * quantity;
-                        cargoWeight -= 150 * quantity;
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {credits}");
-                    }
-                    else
-                    {
-                        sellError();
-                    }
-                    break;
-                default:
-                    Console.WriteLine();
-                    tradeError();
-                    break;
-            }
-        }
-        private int setQuantity()
-        {
-            int quantity = 0;
-            Console.WriteLine("Enter a number 1 - 10");
-            Console.WriteLine();
-            return quantity = int.Parse(Console.ReadLine());
-        }           // used to return integer quantity of an item that will be bought/sold
-        private void sellError()
-        {
-            Console.WriteLine();
-            Console.WriteLine("You do not have that item to sell.");
-        }
-        private void tradeError()
-        {
-            Console.WriteLine();
-            Console.WriteLine("You did not pick a valid option.");
-        }
-        private void weightError()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Your cargo is full. Go sell something.");
-        }
-
-        //ship stuff
-        private void buyship()
+        private void BuyShip()
         {
             Console.Clear();
             Console.WriteLine("Which ship would you like to buy?");
@@ -912,79 +227,170 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Select items 1 - 3, or press 4 to do something");
             Console.WriteLine();
-            shipSelector();
-        }
-        private void shipSelector()
+            //shipSelector();
+        } // not yet implemented
+        //private void shipSelector()
+        //{
+        //    try
+        //    {
+        //        int option = int.Parse(Console.ReadLine());
+        //        if (option == 1 && credits >= 10)
+        //        {
+        //            if (cargoWeight > 200)
+        //            {
+        //                Console.WriteLine();
+        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+        //                Console.WriteLine();
+        //            }
+        //            else
+        //            {
+        //                ship = 1;
+        //                fuel = 100;
+        //                fuelCapacity = 100;
+        //                cargoCapacity = 200;
+        //                credits -= 10;
+        //                Console.WriteLine();
+        //                Console.WriteLine("You are now the proud owner of a helium balloon.");
+        //            }
+        //        }
+        //        else if (option == 2 && credits >= 4200)
+        //        {
+        //            if (cargoWeight > 3000)
+        //            {
+        //                Console.WriteLine();
+        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+        //                Console.WriteLine();
+        //            }
+        //            else
+        //            {
+        //                ship = 2;
+        //                fuel = 1500;
+        //                fuelCapacity = 1500;
+        //                cargoCapacity = 3000;
+        //                credits -= 4200;
+        //                Console.WriteLine();
+        //                Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
+        //            }
+        //        }
+        //        else if (option == 3 && credits >= 15000)
+        //        {
+        //            if (cargoWeight > 20000)
+        //            {
+        //                Console.WriteLine();
+        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+        //                Console.WriteLine();
+        //            }
+        //            else
+        //            {
+        //                ship = 3;
+        //                fuel = 999999999;
+        //                fuelCapacity = 999999999;
+        //                cargoCapacity = 20000;
+        //                credits -= 15000;
+        //                Console.WriteLine();
+        //                Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            mainError();
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        mainError();
+        //    }
+        //} // not yet implemented
+        private void SellMenu()
         {
+            Console.WriteLine();
+            Console.WriteLine("What would you like to sell?");
+            Console.WriteLine($"1 = earthItem for {Earth.GetPrice(MyShip.GetPlanetID())} credits"); // the +1/-1 expressions enforce unique economies among three planets
+            Console.WriteLine($"2 = acItem for {Earth.GetPrice(MyShip.GetPlanetID() - 1)} credits");
+            Console.WriteLine($"3 = mpItem for {Earth.GetPrice(MyShip.GetPlanetID() + 1)} credits");
+            Console.WriteLine();
             try
             {
-                int option = int.Parse(Console.ReadLine());
-                if (option == 1 && credits >= 10)
-                {
-                    if (cargoWeight > 200)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-                        Console.WriteLine();
-                    }
-                    else
-                    {
-                        ship = 1;
-                        fuel = 100;
-                        fuelCapacity = 100;
-                        cargoCapacity = 200;
-                        credits -= 10;
-                        Console.WriteLine();
-                        Console.WriteLine("You are now the proud owner of a helium balloon.");
-                    }
-                }
-                else if (option == 2 && credits >= 4200)
-                {
-                    if (cargoWeight > 3000)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-                        Console.WriteLine();
-                    }
-                    else
-                    {
-                        ship = 2;
-                        fuel = 1500;
-                        fuelCapacity = 1500;
-                        cargoCapacity = 3000;
-                        credits -= 4200;
-                        Console.WriteLine();
-                        Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
-                    }
-                }
-                else if (option == 3 && credits >= 15000)
-                {
-                    if (cargoWeight > 20000)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-                        Console.WriteLine();
-                    }
-                    else
-                    {
-                        ship = 3;
-                        fuel = 999999999;
-                        fuelCapacity = 999999999;
-                        cargoCapacity = 20000;
-                        credits -= 15000;
-                        Console.WriteLine();
-                        Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
-                    }
-                }
-                else
-                {
-                    mainError();
-                }
+
+                SellItem(int.Parse(Console.ReadLine()));
+
             }
             catch (Exception)
             {
-                mainError();
+                tradeError();
             }
+        }
+        private void SellItem(int action)
+        {
+            Console.WriteLine("How many would you like to sell?");
+            int quantity = SetQuantity();
+            switch (action)
+            {
+                case 1: // case for earth item
+                    if (Cargo.GetItemQuant(0) >= quantity)  // enforces current existence within cargo inventory
+                    {
+                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);   // enforces unique economy
+                        Cargo.ChangeTotalEarned(Earth.GetPrice(0) * quantity);  // adds to lifetime earnings to be displayed at end of game
+                        Cargo.ChangeItem(0, -quantity); // removes sold item(s) from cargo inventory
+                        Cargo.ChangeWeight(150 * -quantity);    // removes weight from cargo
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                    }
+                    else
+                    {
+                        sellError();
+                    }
+                    break;
+                case 2: // case to sell ac item. See above for general case statement notes.
+                    if (Cargo.GetItemQuant(1) >= quantity)
+                    {
+                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
+                        Cargo.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
+                        Cargo.ChangeItem(1, -quantity);
+                        Cargo.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                    }
+                    else
+                    {
+                        sellError();
+                    }
+                    break;
+                case 3: // case to sell mp item. See above for general case statement notes.
+                    if (Cargo.GetItemQuant(2) >= quantity)
+                    {
+                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
+                        Cargo.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
+                        Cargo.ChangeItem(2, -quantity);
+                        Cargo.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                    }
+                    else
+                    {
+                        sellError();
+                    }
+                    break;
+                default:
+                    tradeError();
+                    break;
+            }
+        }
+
+        private void tradeError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("You did not pick a valid option.");
+        }
+        private void sellError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("You do not have that item to sell.");
+        }
+        private void weightError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Your cargo is full. Go sell something.");
         }
     }
 }
