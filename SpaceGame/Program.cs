@@ -81,10 +81,12 @@ namespace SpaceGame
         // selects destination when traveling
         private Planet pickPlanet()
         {
+            Console.Clear();
             Console.WriteLine("Where would you like to go?");
             Console.WriteLine("1 = Earth");
             Console.WriteLine("2 = Alpha Centauri");
             Console.WriteLine("3 = Mystery Planet");
+            Console.WriteLine();
 
             Planet destination = new Planet();
 
@@ -441,6 +443,13 @@ namespace SpaceGame
         {
             Console.WriteLine();
             Console.WriteLine("Your cargo is full. Go sell something.");
+        }
+
+        static public void MainError()
+        {
+            Console.Clear();
+            Console.WriteLine("Invalid Input.");
+            Console.WriteLine();
         }
     }
 }
