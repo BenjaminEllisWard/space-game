@@ -14,9 +14,12 @@ namespace SpaceGame
         private int CargoCapacity = 1000;
         private int CargoWeight = 0;
 
-        private int EarthItem = 0; //itemID = 0 , itemID's used as parameters throughout program
-        private int AcItem = 0;    //itemID = 1
-        private int MpItem = 0;    //itemID = 2
+        //itemID = 0 , itemID's used as parameters throughout program
+        private int EarthItem = 0;
+        //itemID = 1
+        private int AcItem = 0;
+        //itemID = 2
+        private int MpItem = 0;
 
 
         public Cargo()
@@ -28,6 +31,7 @@ namespace SpaceGame
             this.AcItem = 0;
             this.MpItem = 0;
         }
+
         public Cargo(int credits, int cargoCapacity, int cargoWeight, int earthItem, int acItem, int mpItem)
         {
             this.Credits = credits;
@@ -37,27 +41,36 @@ namespace SpaceGame
             this.AcItem = acItem;
             this.MpItem = mpItem;
         }
+
         public int GetCargoCapacity()
         {
             return this.CargoCapacity;
         }
+
         public int GetCargoWeight()
         {
             return this.CargoWeight;
         }
+
         public int GetCredits()
         {
             return this.Credits;
         }
-        public void ChangeCredits(int purchasePrice) // if buying, argument is negative int. Positive if selling.
+
+        // if buying, argument is negative int. Positive if selling.
+        public void ChangeCredits(int purchasePrice)
         {
             this.Credits += purchasePrice;
         }
-        public void ChangeWeight(int weight) // if buying, argument is positive int. Negative if selling.
+
+        // if buying, argument is positive int. Negative if selling.
+        public void ChangeWeight(int weight) 
         {
             this.CargoWeight += weight;
         }
-        public void ChangeItem(int itemID, int quantity) // if buying, quantity argument is positive int. Negative if selling.
+
+        // if buying, quantity argument is positive int. Negative if selling.
+        public void ChangeItem(int itemID, int quantity)
         {
             switch (itemID)
             {
@@ -75,6 +88,7 @@ namespace SpaceGame
                     break;
             }
         }
+
         public void CheckCargo()
         {
             Console.WriteLine("Cargo Summary:");
@@ -85,6 +99,7 @@ namespace SpaceGame
             Console.WriteLine($"Alpha Centauri Items: {this.AcItem}");
             Console.WriteLine($"Mystery Planet Items: {this.MpItem}");
         }
+
         public int GetItemQuant(int itemID)
         {
             switch (itemID)
@@ -95,6 +110,7 @@ namespace SpaceGame
                     return this.AcItem;
                 case 2:
                     return this.MpItem;
+                    // TODO put a number that does not reference any real itemID just to return something for default case. Check for a better way to do this.
                 default:
                     return 999;
             }

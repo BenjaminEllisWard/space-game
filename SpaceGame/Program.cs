@@ -21,6 +21,8 @@ namespace SpaceGame
             (new Program()).run();
         }
 
+        // General methods
+
         private void run()
         {
             while (Dead == false)
@@ -28,6 +30,7 @@ namespace SpaceGame
                 mainMenu();
             }
         }
+
         private void mainMenu()
         {
             Console.WriteLine("What's your next move, Captain?");
@@ -37,8 +40,10 @@ namespace SpaceGame
             try
             {
                 int option;
+
                 switch (option = Int32.Parse(Console.ReadLine()))
                 {
+                    // TODO check style conventions for spacing in switches.
                     case 1:
                         MyShip.Travel(pickPlanet());
                         break;
@@ -59,25 +64,32 @@ namespace SpaceGame
                         break;
                 }
             }
+
             catch (Exception)
             {
                 Console.WriteLine("Invalid input");
             }
         }
+
         private void CheckStatus()
         {
             Console.WriteLine($"Location: {MyShip.GetLocation()}");
             Console.WriteLine($"    Fuel: {MyShip.Fuel}");
             Console.WriteLine($" Credits: {Cargo.GetCredits()}");
         }
+
+        // selects destination when traveling
         private Planet pickPlanet()
         {
             Console.WriteLine("Where would you like to go?");
             Console.WriteLine("1 = Earth");
             Console.WriteLine("2 = Alpha Centauri");
             Console.WriteLine("3 = Mystery Planet");
+
             Planet destination = new Planet();
+
             int option = int.Parse(Console.ReadLine());
+
             switch (option)
             {
                 case 1:
@@ -94,7 +106,10 @@ namespace SpaceGame
                     break;
             }
             return destination;
-        }   // selects destination when traveling
+        }
+
+
+        // Trade methods
 
         public void Trade()
         {
@@ -102,6 +117,7 @@ namespace SpaceGame
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1 = Buy, 2 = Sell, 3 = Something else");
             Console.WriteLine();
+
             try
             {
                 switch (int.Parse(Console.ReadLine()))
@@ -114,7 +130,6 @@ namespace SpaceGame
                         break;
                     case 3:
                         break;
-
                     default:
                         tradeError();
                         break;
@@ -125,13 +140,16 @@ namespace SpaceGame
                 tradeError();
             }
         }
+
+        // used to return integer quantity of an item that will be bought/sold
         private int SetQuantity()
         {
             int quantity = 0;
             Console.WriteLine("Enter a number 1 - 10");
             Console.WriteLine();
             return quantity = int.Parse(Console.ReadLine());
-        }           // used to return integer quantity of an item that will be bought/sold
+        }
+        
         private void BuyMenu()
         {
             Console.WriteLine();
@@ -159,18 +177,24 @@ namespace SpaceGame
             {
                 tradeError();
             }
-
         }
+
         private void BuyItem()
         {
             Console.WriteLine();
             Console.WriteLine("How many would you like to buy");
             int quantity = SetQuantity();
-            if (Cargo.GetCargoWeight() <= (Cargo.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)  // enforces cargo capacity
+
+            // enforces cargo capacity
+            if (Cargo.GetCargoWeight() <= (Cargo.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                Cargo.ChangeCredits(-175 * quantity);   // deducts credits
-                Cargo.ChangeItem(MyShip.GetItemID(), quantity); // first parameter selects location dependent item
-                Cargo.ChangeWeight(150 * quantity); // adds weight to cargo
+                // deducts credits
+                Cargo.ChangeCredits(-175 * quantity);
+                // first parameter selects location dependent item
+                Cargo.ChangeItem(MyShip.GetItemID(), quantity);
+                // adds weight to cargo
+                Cargo.ChangeWeight(150 * quantity);
+
                 Console.Clear();
                 Console.WriteLine($"Item purchased. Current credits = {Cargo.GetCredits()}.");
             }
@@ -179,6 +203,7 @@ namespace SpaceGame
                 weightError();
             }
         }
+
         private void BuyFuel()
         {
             if (MyShip.GetFuelLevel() < MyShip.GetFuelCapacity())
@@ -196,6 +221,8 @@ namespace SpaceGame
             Console.WriteLine($"Credits = {Cargo.GetCredits()}");
             Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
         }
+
+        // not yet implemented
         private void BuyShip()
         {
             Console.Clear();
@@ -228,7 +255,8 @@ namespace SpaceGame
             Console.WriteLine("Select items 1 - 3, or press 4 to do something");
             Console.WriteLine();
             //shipSelector();
-        } // not yet implemented
+        }
+
         //private void shipSelector()
         //{
         //    try
@@ -301,38 +329,49 @@ namespace SpaceGame
         //        mainError();
         //    }
         //} // not yet implemented
+
         private void SellMenu()
         {
             Console.WriteLine();
             Console.WriteLine("What would you like to sell?");
-            Console.WriteLine($"1 = earthItem for {Earth.GetPrice(MyShip.GetPlanetID())} credits"); // the +1/-1 expressions enforce unique economies among three planets
+
+            // the +1/-1 expressions enforce unique economies among three planets.
+            Console.WriteLine($"1 = earthItem for {Earth.GetPrice(MyShip.GetPlanetID())} credits"); 
             Console.WriteLine($"2 = acItem for {Earth.GetPrice(MyShip.GetPlanetID() - 1)} credits");
             Console.WriteLine($"3 = mpItem for {Earth.GetPrice(MyShip.GetPlanetID() + 1)} credits");
             Console.WriteLine();
             try
             {
-
                 SellItem(int.Parse(Console.ReadLine()));
-
             }
             catch (Exception)
             {
                 tradeError();
             }
         }
+
+        // parameter is input by user to determine which item is being sold.
         private void SellItem(int action)
         {
             Console.WriteLine("How many would you like to sell?");
             int quantity = SetQuantity();
+
             switch (action)
             {
-                case 1: // case for earth item
-                    if (Cargo.GetItemQuant(0) >= quantity)  // enforces current existence within cargo inventory
+                // case for earth item
+                case 1:
+                    // enforces current existence within cargo inventory
+                    if (Cargo.GetItemQuant(0) >= quantity)
                     {
-                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);   // enforces unique economy
-                        Cargo.ChangeTotalEarned(Earth.GetPrice(0) * quantity);  // adds to lifetime earnings to be displayed at end of game
-                        Cargo.ChangeItem(0, -quantity); // removes sold item(s) from cargo inventory
-                        Cargo.ChangeWeight(150 * -quantity);    // removes weight from cargo
+                        // enforces unique economy
+                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);
+                        // adds to lifetime earnings to be displayed at end of game
+                        Cargo.ChangeTotalEarned(Earth.GetPrice(0) * quantity);
+                        // removes sold item(s) from cargo inventory
+                        Cargo.ChangeItem(0, -quantity);
+                        // removes weight from cargo
+                        Cargo.ChangeWeight(150 * -quantity);
+
                         Console.Clear();
                         Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
                     }
@@ -341,9 +380,12 @@ namespace SpaceGame
                         sellError();
                     }
                     break;
-                case 2: // case to sell ac item. See above for general case statement notes.
+
+                // case to sell ac item. See above for general case statement notes.
+                case 2:
                     if (Cargo.GetItemQuant(1) >= quantity)
                     {
+                        // enforces unique economy. Notice the -1 modifier as opposed to the other cases.
                         Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
                         Cargo.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
                         Cargo.ChangeItem(1, -quantity);
@@ -356,7 +398,9 @@ namespace SpaceGame
                         sellError();
                     }
                     break;
-                case 3: // case to sell mp item. See above for general case statement notes.
+
+                // case to sell mp item. See above for general case statement notes.
+                case 3:
                     if (Cargo.GetItemQuant(2) >= quantity)
                     {
                         Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
@@ -371,22 +415,28 @@ namespace SpaceGame
                         sellError();
                     }
                     break;
+
                 default:
                     tradeError();
                     break;
             }
         }
 
+
+        // Error messages
+
         private void tradeError()
         {
             Console.WriteLine();
             Console.WriteLine("You did not pick a valid option.");
         }
+
         private void sellError()
         {
             Console.WriteLine();
             Console.WriteLine("You do not have that item to sell.");
         }
+
         private void weightError()
         {
             Console.WriteLine();

@@ -8,11 +8,12 @@ namespace SpaceGame
 {
     public class Ship
     {
+        // TODO CargoCapacity field exists for both Ship and Cargo classes. Trading calculations use Cargo's, but capacity will need
+        // to change depending on ship upgrade in the future. Figure out how this is going to work or remove Ship.CargoCapacity.
         public int CargoCapacity = 1000;
         public int Fuel = 1000;
         public int FuelCapacity = 1000;
         public string ShipName = "Your Starter Ship";
-
         public Planet Location = Planet.Earth();
 
         public Ship()
@@ -32,11 +33,11 @@ namespace SpaceGame
 
         public void Travel(Planet destination)
         {
-
+            // Calculates distance to destination and substracts one fuel per distance unit.
+            // Will incorporate a fuel efficiency modifier (value changes on speed) in future commit.
             this.Fuel -= Convert.ToInt32(Location.DistanceToPlanet(destination));
 
             this.Location = destination;
-
             Console.WriteLine($"Welcome to {destination.PlanetName}.");
         }
 
@@ -44,28 +45,34 @@ namespace SpaceGame
         {
             return Location.PlanetName;
         }
+
         public int GetItemID()
         {
             return Location.ItemID;
         }
+
         public int GetPlanetID()
         {
             return Location.PlanetID;
         }
+
         public int GetFuelLevel()
         {
             return this.Fuel;
         }
+
         public int GetFuelCapacity()
         {
             return this.FuelCapacity;
         }
 
-        public void ChangeFuel(int fuel) // argument is positive when buying fuel, negative when traveling.
+        // argument is positive when buying fuel, negative when traveling.
+        public void ChangeFuel(int fuel)
         {
             this.Fuel += fuel;
 
-            if (this.Fuel > this.FuelCapacity)  // enforces fuel capacity
+            // enforces fuel capacity
+            if (this.Fuel > this.FuelCapacity)
             {
                 this.Fuel = this.FuelCapacity;
             }
