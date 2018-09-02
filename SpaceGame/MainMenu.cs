@@ -13,6 +13,11 @@ namespace SpaceGame
         private Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
         private Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
         private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
+        private Planet PizzaPlanet = new Planet(20, 30, "Pizza Planet", 3, 1);
+        private Planet OtherPlanet = new Planet(-20, -30, "Other Planet", 3, 1);
+        private Planet OtherPlanet2 = new Planet(-20, 30, "Other Planet", 3, 1);
+        private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet", 3, 1);
+        private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet", 3, 1);
         private Ship MyShip = new Ship();
 
 
