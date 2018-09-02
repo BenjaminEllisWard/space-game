@@ -15,6 +15,7 @@ namespace SpaceGame
         public int FuelCapacity = 1000;
         public string ShipName = "Your Starter Ship";
         public Planet Location = Planet.Earth();
+        private Cargo Cargo = new Cargo();
 
         // TODO is this the best place for this field?
         private double YearsLeft = 40;
@@ -147,6 +148,31 @@ namespace SpaceGame
             return Location.ItemID;
         }
 
+        internal int GetCargoCapacity()
+        {
+            return Cargo.GetCargoCapacity();
+        }
+
+        internal int GetCargoWeight()
+        {
+            return Cargo.GetCargoWeight();
+        }
+
+        internal void ChangeCredits(int purchasePrice)
+        {
+            Cargo.ChangeCredits(purchasePrice);
+        }
+
+        internal void ChangeItem(int itemID, int quantity)
+        {
+            Cargo.ChangeItem(itemID, quantity);
+        }
+
+        internal void ChangeWeight(int weight)
+        {
+            Cargo.ChangeWeight(weight);
+        }
+
         public int GetPlanetID()
         {
             return Location.PlanetID;
@@ -160,6 +186,18 @@ namespace SpaceGame
         public int GetFuelCapacity()
         {
             return this.FuelCapacity;
+        }
+
+        public int GetCredits()
+        {
+            return Cargo.GetCredits();
+        }
+
+        public double GetYears() => YearsLeft;
+
+        public void CheckCargo()
+        {
+            Cargo.CheckCargo();
         }
 
         // argument is positive when buying fuel, negative when traveling.
@@ -184,6 +222,16 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Invalid Input");
             Console.WriteLine();
+        }
+
+        internal int GetItemQuant(int itemID)
+        {
+            return Cargo.GetItemQuant(itemID);
+        }
+
+        public void ChangeTotalEarned(int v)
+        {
+            Cargo.ChangeTotalEarned(v);
         }
     }
 }

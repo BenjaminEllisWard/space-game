@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceGame
 {
-    class Cargo
+    public class Cargo
     {
         private int Credits = 1000;
         private int TotalCreditsEarned = 0;

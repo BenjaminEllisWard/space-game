@@ -14,7 +14,7 @@ namespace SpaceGame
         private Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
         private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
         private Ship MyShip = new Ship();
-        private Cargo Cargo = new Cargo();
+
 
         public void MainMenuRun()
         {
@@ -39,7 +39,7 @@ namespace SpaceGame
                         CheckStatus();
                         break;
                     case 4:
-                        Cargo.CheckCargo();
+                        MyShip.CheckCargo();
                         break;
                     case 5:
                         Dead = true;
@@ -60,7 +60,7 @@ namespace SpaceGame
         {
             Console.WriteLine($"Location: {MyShip.GetLocation()}");
             Console.WriteLine($"    Fuel: {MyShip.Fuel}");
-            Console.WriteLine($" Credits: {Cargo.GetCredits()}");
+            Console.WriteLine($" Credits: {MyShip.GetCredits()}");
         }
 
         // selects destination when traveling
@@ -173,17 +173,17 @@ namespace SpaceGame
             int quantity = SetQuantity();
 
             // enforces cargo capacity
-            if (Cargo.GetCargoWeight() <= (Cargo.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)
+            if (MyShip.GetCargoWeight() <= (MyShip.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
                 // deducts credits
-                Cargo.ChangeCredits(-175 * quantity);
+                MyShip.ChangeCredits(-175 * quantity);
                 // first parameter selects location dependent item
-                Cargo.ChangeItem(MyShip.GetItemID(), quantity);
+                MyShip.ChangeItem(MyShip.GetItemID(), quantity);
                 // adds weight to cargo
-                Cargo.ChangeWeight(150 * quantity);
+                MyShip.ChangeWeight(150 * quantity);
 
                 Console.Clear();
-                Console.WriteLine($"Item purchased. Current credits = {Cargo.GetCredits()}.");
+                Console.WriteLine($"Item purchased. Current credits = {MyShip.GetCredits()}.");
             }
             else
             {
@@ -195,7 +195,7 @@ namespace SpaceGame
         {
             if (MyShip.GetFuelLevel() < MyShip.GetFuelCapacity())
             {
-                Cargo.ChangeCredits(-75);
+                MyShip.ChangeCredits(-75);
                 MyShip.ChangeFuel(250); // fuel capacity enforced within Ship.ChangeFuel()
                 Console.Clear();
                 Console.WriteLine("Fuel purchased.");
@@ -205,7 +205,7 @@ namespace SpaceGame
                 Console.Clear();
                 Console.WriteLine("You're tank is full");
             }
-            Console.WriteLine($"Credits = {Cargo.GetCredits()}");
+            Console.WriteLine($"Credits = {MyShip.GetCredits()}");
             Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
         }
 
@@ -348,19 +348,19 @@ namespace SpaceGame
                 // case for earth item
                 case 1:
                     // enforces current existence within cargo inventory
-                    if (Cargo.GetItemQuant(0) >= quantity)
+                    if (MyShip.GetItemQuant(0) >= quantity)
                     {
                         // enforces unique economy
-                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);
+                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);
                         // adds to lifetime earnings to be displayed at end of game
-                        Cargo.ChangeTotalEarned(Earth.GetPrice(0) * quantity);
+                        MyShip.ChangeTotalEarned(Earth.GetPrice(0) * quantity);
                         // removes sold item(s) from cargo inventory
-                        Cargo.ChangeItem(0, -quantity);
+                        MyShip.ChangeItem(0, -quantity);
                         // removes weight from cargo
-                        Cargo.ChangeWeight(150 * -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
 
                         Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
                     }
                     else
                     {
@@ -370,15 +370,15 @@ namespace SpaceGame
 
                 // case to sell ac item. See above for general case statement notes.
                 case 2:
-                    if (Cargo.GetItemQuant(1) >= quantity)
+                    if (MyShip.GetItemQuant(1) >= quantity)
                     {
                         // enforces unique economy. Notice the -1 modifier as opposed to the other cases.
-                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
-                        Cargo.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
-                        Cargo.ChangeItem(1, -quantity);
-                        Cargo.ChangeWeight(150 * -quantity);
+                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
+                        MyShip.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
+                        MyShip.ChangeItem(1, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
                     }
                     else
                     {
@@ -388,14 +388,14 @@ namespace SpaceGame
 
                 // case to sell mp item. See above for general case statement notes.
                 case 3:
-                    if (Cargo.GetItemQuant(2) >= quantity)
+                    if (MyShip.GetItemQuant(2) >= quantity)
                     {
-                        Cargo.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
-                        Cargo.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
-                        Cargo.ChangeItem(2, -quantity);
-                        Cargo.ChangeWeight(150 * -quantity);
+                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
+                        MyShip.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
+                        MyShip.ChangeItem(2, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {Cargo.GetCredits()}");
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
                     }
                     else
                     {
@@ -437,9 +437,28 @@ namespace SpaceGame
             Console.WriteLine();
         }
 
-        public bool GetDead()
+        public bool DeathChecker()
         {
-            return Dead;
+            bool dead = false;
+
+            if (MyShip.GetFuelLevel() <= 0)
+            {
+               dead = true;
+            }
+            if (MyShip.GetCredits() <= 0)
+            {
+                dead = true;
+            }
+            if (MyShip.GetYears() <= 0)
+            {
+                dead = true;
+            }
+            if (Dead == true)
+            {
+                dead = true;
+            }
+
+            return dead;
         }
     }
 }
