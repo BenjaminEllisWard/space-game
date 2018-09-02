@@ -8,9 +8,6 @@ namespace SpaceGame
 {
     public class Ship
     {
-        // TODO CargoCapacity field exists for both Ship and Cargo classes. Trading calculations use Cargo's, but capacity will need
-        // to change depending on ship upgrade in the future. Figure out how this is going to work or remove Ship.CargoCapacity.
-        private int CargoCapacity = 1000;
         private int Fuel = 1000;
         private int FuelCapacity = 1000;
         private string ShipName = "Your Starter Ship";
@@ -32,14 +29,12 @@ namespace SpaceGame
 
         public Ship()
         {
-            CargoCapacity = 1000;
             FuelCapacity = 1000;
             ShipName = "Your Starter Ship";
         }
 
-        public Ship(int cargoCapacity, int fuelCapacity, string shipName, Planet location)
+        public Ship(int fuelCapacity, string shipName, Planet location)
         {
-            this.CargoCapacity = cargoCapacity;
             this.FuelCapacity = fuelCapacity;
             this.ShipName = shipName;
             this.Location = Planet.Earth();
@@ -47,78 +42,212 @@ namespace SpaceGame
 
         public void Travel()
         {
-            Planet destination = PickPlanet();
+
+
             // prompts user to input warpFactor.
             int warpFactor = WarpSelector();
+
+            Planet destination = PickPlanet(warpFactor);
+
+            if (destination != Location)
+            {
+                double fuelEfficiency = FuelEfficiencyCalc(warpFactor);
+                double warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
+
+                // Resource burn calculations. Will be used to offer final travel decision to user.
+                double fuelReq = Location.DistanceToPlanet(destination) * fuelEfficiency;
+                double yearsReq = Location.DistanceToPlanet(destination) / (warpSpeed);
+
+
+                // User confirmation based on fuel/time required for trip.
+                bool decision = ConfirmTravel(yearsReq, fuelReq);
+
+                if (decision == true)
+                {
+                    // Subtracts fuel based on distance. fuelEfficiency increases (greater fuel reduction) with warpFactor.
+                    this.Fuel -= Convert.ToInt32(Location.DistanceToPlanet(destination) * fuelEfficiency);
+
+                    // Calculations for deducting time off game clock. Deduction increases with warpFactor.
+                    this.YearsLeft -= Location.DistanceToPlanet(destination) / (warpSpeed);
+
+                    this.Location = destination;
+
+                    Console.Clear();
+                    Console.WriteLine($"Welcome to {destination.PlanetName}.");
+                    Console.WriteLine();
+                    Console.WriteLine($"         Fuel = {this.Fuel}/{this.FuelCapacity}");
+                    Console.WriteLine($"Time traveled = {(40 - YearsLeft).ToString("F2")} years");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }
+        }
+
+        // Selects destination when traveling.
+        private Planet PickPlanet(int warpFactor)
+        {
 
             double fuelEfficiency = FuelEfficiencyCalc(warpFactor);
             double warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
 
-            // Resource burn calculations. Will be used to offer final travel decision to user.
-            double fuelReq = Location.DistanceToPlanet(destination) * fuelEfficiency;
-            double yearsReq = Location.DistanceToPlanet(destination) / (warpSpeed);
+            // Resource burn calculations. Will be used to determine which locations are displayed for travel.
+            double fuelReq1 = Location.DistanceToPlanet(Earth) * fuelEfficiency;
+            double yearsReq1 = Location.DistanceToPlanet(Earth) / (warpSpeed);
+
+            double fuelReq2 = Location.DistanceToPlanet(AlphaCentauri) * fuelEfficiency;
+            double yearsReq2 = Location.DistanceToPlanet(AlphaCentauri) / (warpSpeed);
+
+            double fuelReq3 = Location.DistanceToPlanet(MysteryPlanet) * fuelEfficiency;
+            double yearsReq3 = Location.DistanceToPlanet(MysteryPlanet) / (warpSpeed);
+
+            double fuelReq4 = Location.DistanceToPlanet(ShipGarage) * fuelEfficiency;
+            double yearsReq4 = Location.DistanceToPlanet(ShipGarage) / (warpSpeed);
+
+            double fuelReq5 = Location.DistanceToPlanet(PizzaPlanet) * fuelEfficiency;
+            double yearsReq5 = Location.DistanceToPlanet(PizzaPlanet) / (warpSpeed);
+
+            double fuelReq6 = Location.DistanceToPlanet(OtherPlanet) * fuelEfficiency;
+            double yearsReq6 = Location.DistanceToPlanet(OtherPlanet) / (warpSpeed);
+
+            double fuelReq7 = Location.DistanceToPlanet(OtherPlanet2) * fuelEfficiency;
+            double yearsReq7 = Location.DistanceToPlanet(OtherPlanet2) / (warpSpeed);
+
+            double fuelReq8 = Location.DistanceToPlanet(OtherPlanet3) * fuelEfficiency;
+            double yearsReq8 = Location.DistanceToPlanet(OtherPlanet3) / (warpSpeed);
+
+            double fuelReq9 = Location.DistanceToPlanet(OtherPlanet4) * fuelEfficiency;
+            double yearsReq9 = Location.DistanceToPlanet(OtherPlanet4) / (warpSpeed);
 
 
-            // User confirmation based on fuel/time required for trip.
-            bool decision = ConfirmTravel(yearsReq, fuelReq);
-
-            if (decision == true)
-            {
-                // Subtracts fuel based on distance. fuelEfficiency increases (greater fuel reduction) with warpFactor.
-                this.Fuel -= Convert.ToInt32(Location.DistanceToPlanet(destination) * fuelEfficiency);
-
-                // Calculations for deducting time off game clock. Deduction increases with warpFactor.
-                this.YearsLeft -= Location.DistanceToPlanet(destination) / (warpSpeed);
-
-                this.Location = destination;
-
-                Console.Clear();
-                Console.WriteLine($"Welcome to {destination.PlanetName}.");
-                Console.WriteLine();
-                Console.WriteLine($"         Fuel = {this.Fuel}/{this.FuelCapacity}");
-                Console.WriteLine($"Time traveled = {(40 - YearsLeft).ToString("F2")} years");
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.Clear();
-            }
-        }
-
-        // selects destination when traveling
-        private Planet PickPlanet()
-        {
             Console.Clear();
             Console.WriteLine("Where would you like to go?");
-            Console.WriteLine("1 = Earth");
-            Console.WriteLine("2 = Alpha Centauri");
-            Console.WriteLine("3 = Mystery Planet");
-            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor");
+
+            // used to asign a unique value to option cases.
+            int optionIndex = 1;
+
+            // each option corresponds to a location.
+            int optionCase1 = 0;
+            int optionCase2 = 0;
+            int optionCase3 = 0;
+            int optionCase4 = 0;
+            int optionCase5 = 0;
+            int optionCase6 = 0;
+            int optionCase7 = 0;
+            int optionCase8 = 0;
+            int optionCase9 = 0;
+
+            // each if statement checks that location is either in range based on current fuel level/years left,
+            // and that the requirements do not burn 0 resources (travel to current location). optionIndex then
+            // assigns a value (starting at 1) for each case that meets the boolean requirements.
+            if (fuelReq1 < GetFuelLevel() && yearsReq1 < YearsLeft && fuelReq1 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {Earth.GetPlanetName()}");
+                optionCase1 = optionIndex++;
+            }
+            if (fuelReq2 < GetFuelLevel() && yearsReq2 < YearsLeft && fuelReq2 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {AlphaCentauri.GetPlanetName()}");
+                optionCase2 = optionIndex++;
+            }
+            if (fuelReq3 < GetFuelLevel() && yearsReq3 < YearsLeft && fuelReq3 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {MysteryPlanet.GetPlanetName()}");
+                optionCase3 = optionIndex++;
+            }
+            if (fuelReq4 < GetFuelLevel() && yearsReq4 < YearsLeft && fuelReq4 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {ShipGarage.GetPlanetName()}");
+                optionCase4 = optionIndex++;
+            }
+            if (fuelReq5 < GetFuelLevel() && yearsReq5 < YearsLeft && fuelReq5 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {PizzaPlanet.GetPlanetName()}");
+                optionCase5 = optionIndex++;
+            }
+            if (fuelReq6 < GetFuelLevel() && yearsReq6 < YearsLeft && fuelReq6 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {OtherPlanet.GetPlanetName()}");
+                optionCase6 = optionIndex++;
+            }
+            if (fuelReq7 < GetFuelLevel() && yearsReq7 < YearsLeft && fuelReq7 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {OtherPlanet2.GetPlanetName()}");
+                optionCase7 = optionIndex++;
+            }
+            if (fuelReq8 < GetFuelLevel() && yearsReq8 < YearsLeft && fuelReq8 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {OtherPlanet3.GetPlanetName()}");
+                optionCase8 = optionIndex++;
+            }
+            if (fuelReq9 < GetFuelLevel() && yearsReq9 < YearsLeft && fuelReq9 != 0)
+            {
+                Console.WriteLine($"{optionIndex} = {OtherPlanet4.GetPlanetName()}");
+                optionCase9 = optionIndex++;
+            }
             Console.WriteLine();
 
             Planet destination = new Planet();
 
-            int option = int.Parse(Console.ReadLine());
-
-            switch (option)
+            try
             {
-                case 1:
+                int option = int.Parse(Console.ReadLine());
+
+                // if input matches the corresponding optionCase, destination is set to a given planet.
+                if (option == optionCase1 && option != 0)
+                {
                     destination = Earth;
-                    break;
-                case 2:
+                }
+                else if (option == optionCase2 && option != 0)
+                {
                     destination = AlphaCentauri;
-                    break;
-                case 3:
+                }
+                else if (option == optionCase3 && option != 0)
+                {
                     destination = MysteryPlanet;
-                    break;
-                case 4:
+                }
+                else if (option == optionCase4 && option != 0)
+                {
                     destination = ShipGarage;
-                    break;
-                default:
-                    Console.WriteLine("You must pick a valid destination.");
-                    break;
+                }
+                else if (option == optionCase5 && option != 0)
+                {
+                    destination = PizzaPlanet;
+                }
+                else if (option == optionCase6 && option != 0)
+                {
+                    destination = OtherPlanet;
+                }
+                else if (option == optionCase7 && option != 0)
+                {
+                    destination = OtherPlanet2;
+                }
+                else if (option == optionCase8 && option != 0)
+                {
+                    destination = OtherPlanet3;
+                }
+                else if (option == optionCase9 && option != 0)
+                {
+                    destination = OtherPlanet4;
+                }
+                else
+                {
+                    Console.WriteLine("You did not pick a valid option.");
+                    // if input does not match an option case, the current location is returned. A boolean check in Travel() bypasses remaining travel
+                    // functions if destination == Location.
+                    destination = Location;
+                }
+                return destination;
             }
-            return destination;
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid Input.");
+                // if input does not match an option case, the current location is returned. A boolean check in Travel() bypasses remaining travel
+                // functions if destination == Location.
+                return Location;
+            }
         }
 
         // Displays travel requirements, user confirms travel.
@@ -270,11 +399,6 @@ namespace SpaceGame
             {
                 this.Fuel = this.FuelCapacity;
             }
-        }
-
-        public static Ship GetMyShip()
-        {
-            return new Ship(0, 0, "Your Starter Ship", Planet.Earth());
         }
 
         private void MainError()

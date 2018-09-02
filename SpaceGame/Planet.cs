@@ -35,7 +35,7 @@ namespace SpaceGame
             this.PlanetID = planetID;
         }
 
-        string GetPlanetName()
+        public string GetPlanetName()
         {
             return this.PlanetName;
         }
