@@ -13,7 +13,7 @@ namespace SpaceGame
         public int CargoCapacity = 1000;
         public int Fuel = 1000;
         public int FuelCapacity = 1000;
-        public string ShipName = "Your Starter Ship";
+        private string ShipName = "Your Starter Ship";
         public Planet Location = Planet.Earth();
         private Cargo Cargo = new Cargo();
 
@@ -143,6 +143,8 @@ namespace SpaceGame
             return Location.PlanetName;
         }
 
+        public string GetShipName() => ShipName;
+
         public int GetItemID()
         {
             return Location.ItemID;
@@ -242,6 +244,11 @@ namespace SpaceGame
         public void ChangeTotalEarned(int v)
         {
             Cargo.ChangeTotalEarned(v);
+        }
+
+        internal void ChangeShipName(string shipName)
+        {
+            ShipName = shipName;
         }
     }
 }

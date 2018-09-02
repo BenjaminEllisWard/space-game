@@ -58,9 +58,12 @@ namespace SpaceGame
 
         private void CheckStatus()
         {
+            Console.Clear();
             Console.WriteLine($"Location: {MyShip.GetLocation()}");
             Console.WriteLine($"    Fuel: {MyShip.Fuel}");
             Console.WriteLine($" Credits: {MyShip.GetCredits()}");
+            Console.WriteLine($"    Ship: {MyShip.GetShipName()}");
+            Console.WriteLine();
         }
 
         // selects destination when traveling
@@ -275,6 +278,7 @@ namespace SpaceGame
                         MyShip.ChangeFuel(100);
                         MyShip.ChangeCargoCapacity(200);
                         MyShip.ChangeCredits(-10);
+                        MyShip.ChangeShipName("A helium baloon");
                         Console.WriteLine();
                         Console.WriteLine("You are now the proud owner of a helium balloon.");
                     }
@@ -293,6 +297,7 @@ namespace SpaceGame
                         MyShip.ChangeFuel(1500);
                         MyShip.ChangeCargoCapacity(3000);
                         MyShip.ChangeCredits(-4200);
+                        MyShip.ChangeShipName("Reasonable Rocketship");
                         Console.WriteLine();
                         Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
                     }
@@ -311,6 +316,7 @@ namespace SpaceGame
                         MyShip.ChangeFuel(9999999);
                         MyShip.ChangeCargoCapacity(20000);
                         MyShip.ChangeCredits(-15000);
+                        MyShip.ChangeShipName("Malaysia Airlines Flight 370");
                         Console.WriteLine();
                         Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
                     }

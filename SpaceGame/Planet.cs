@@ -13,7 +13,8 @@ namespace SpaceGame
         //TODO figure out why PlanetName, ItemID, and PlanetID have to be public.
         public string PlanetName;
         public int ItemID = 0;
-        public int PlanetID = 1;       //  0    1    2    3    4
+        public int PlanetID = 1;
+                                       //  0    1    2    3    4
         private int[] Price = new int[] { 250, 150, 275, 250, 150 };    // used with PlanetID to enforce unique economies
 
         public Planet()
