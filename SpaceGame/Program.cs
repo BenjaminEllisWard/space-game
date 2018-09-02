@@ -13,11 +13,11 @@ namespace SpaceGame
 
         static void Main(string[] args)
         {
-            (new Program()).run();
+            (new Program()).Run();
         }
 
 
-        private void run()
+        private void Run()
         {
             Console.WriteLine("This message gives an introduction to the game. " +
                               "Edit the text in the run() method to alter this message.");

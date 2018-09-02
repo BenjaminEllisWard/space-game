@@ -10,9 +10,9 @@ namespace SpaceGame
     {
         // TODO CargoCapacity field exists for both Ship and Cargo classes. Trading calculations use Cargo's, but capacity will need
         // to change depending on ship upgrade in the future. Figure out how this is going to work or remove Ship.CargoCapacity.
-        public int CargoCapacity = 1000;
-        public int Fuel = 1000;
-        public int FuelCapacity = 1000;
+        private int CargoCapacity = 1000;
+        private int Fuel = 1000;
+        private int FuelCapacity = 1000;
         private string ShipName = "Your Starter Ship";
         public Planet Location = Planet.Earth();
         private Cargo Cargo = new Cargo();
@@ -38,9 +38,9 @@ namespace SpaceGame
         public void Travel(Planet destination)
         {
             // prompts user to input warpFactor.
-            int warpFactor = warpSelector();
+            int warpFactor = WarpSelector();
 
-            double fuelEfficiency = fuelEfficiencyCalc(warpFactor);
+            double fuelEfficiency = FuelEfficiencyCalc(warpFactor);
             double warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
 
             // Resource burn calculations. Will be used to offer final travel decision to user.
@@ -98,7 +98,7 @@ namespace SpaceGame
             }
         }
 
-        private int warpSelector()
+        private int WarpSelector()
         {
             Console.WriteLine();
             Console.WriteLine("Select your warp speed, Captain.");
@@ -116,7 +116,7 @@ namespace SpaceGame
                     Console.Clear();
                     Console.WriteLine("You must enter a valid warp speed.");
                     Console.WriteLine();
-                    warpSelector();
+                    WarpSelector();
                 }
 
                 return warpFactor;
@@ -124,7 +124,7 @@ namespace SpaceGame
             catch (Exception)
             {
                 MainError();
-                warpSelector();
+                WarpSelector();
                 // TODO is there a way to do this block without returning a value?
                 return 1;
             }
@@ -132,7 +132,7 @@ namespace SpaceGame
 
         // return value is used to increase fuel required as warpFactor increases.
         // TODO tune calculation when implementing fuel requirements as stated in requirements.md.
-        private double fuelEfficiencyCalc(int warpFactor)
+        private double FuelEfficiencyCalc(int warpFactor)
         {
             double efficiency = Math.Pow(warpFactor, 1.5);
             return efficiency;

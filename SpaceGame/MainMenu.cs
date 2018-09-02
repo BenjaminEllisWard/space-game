@@ -30,7 +30,7 @@ namespace SpaceGame
                 {
                     // TODO check style conventions for spacing in switches.
                     case 1:
-                        MyShip.Travel(pickPlanet());
+                        MyShip.Travel(PickPlanet());
                         break;
                     case 2:
                         Trade();
@@ -60,14 +60,14 @@ namespace SpaceGame
         {
             Console.Clear();
             Console.WriteLine($"Location: {MyShip.GetLocation()}");
-            Console.WriteLine($"    Fuel: {MyShip.Fuel}");
+            Console.WriteLine($"    Fuel: {MyShip.GetFuelLevel()}");
             Console.WriteLine($" Credits: {MyShip.GetCredits()}");
             Console.WriteLine($"    Ship: {MyShip.GetShipName()}");
             Console.WriteLine();
         }
 
         // selects destination when traveling
-        private Planet pickPlanet()
+        private Planet PickPlanet()
         {
             Console.Clear();
             Console.WriteLine("Where would you like to go?");
@@ -125,13 +125,13 @@ namespace SpaceGame
                     case 3:
                         break;
                     default:
-                        tradeError();
+                        TradeError();
                         break;
                 }
             }
             catch (Exception)
             {
-                tradeError();
+                TradeError();
             }
         }
 
@@ -169,14 +169,14 @@ namespace SpaceGame
                             BuyFuel();
                             break;
                         default:
-                            tradeError();
+                            TradeError();
                             break;
                     }
                     Console.WriteLine();
                 }
                 catch (Exception)
                 {
-                    tradeError();
+                    TradeError();
                 }
             }
         }
@@ -202,7 +202,7 @@ namespace SpaceGame
             }
             else
             {
-                weightError();
+                WeightError();
             }
         }
 
@@ -256,10 +256,10 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Select items 1 - 3, or press 4 to do something");
             Console.WriteLine();
-            shipSelector();
+            ShipSelector();
         }
 
-        private void shipSelector()
+        private void ShipSelector()
         {
             try
             {
@@ -348,7 +348,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                tradeError();
+                TradeError();
             }
         }
 
@@ -379,7 +379,7 @@ namespace SpaceGame
                     }
                     else
                     {
-                        sellError();
+                        SellError();
                     }
                     break;
 
@@ -397,7 +397,7 @@ namespace SpaceGame
                     }
                     else
                     {
-                        sellError();
+                        SellError();
                     }
                     break;
 
@@ -414,12 +414,12 @@ namespace SpaceGame
                     }
                     else
                     {
-                        sellError();
+                        SellError();
                     }
                     break;
 
                 default:
-                    tradeError();
+                    TradeError();
                     break;
             }
         }
@@ -427,19 +427,19 @@ namespace SpaceGame
 
         // Error messages
 
-        private void tradeError()
+        private void TradeError()
         {
             Console.WriteLine();
             Console.WriteLine("You did not pick a valid option.");
         }
 
-        private void sellError()
+        private void SellError()
         {
             Console.WriteLine();
             Console.WriteLine("You do not have that item to sell.");
         }
 
-        private void weightError()
+        private void WeightError()
         {
             Console.WriteLine();
             Console.WriteLine("Your cargo is full. Go sell something.");
