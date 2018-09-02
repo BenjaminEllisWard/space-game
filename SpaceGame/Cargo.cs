@@ -120,5 +120,10 @@ namespace SpaceGame
         {
             this.TotalCreditsEarned += v;
         }
+
+        internal void ChangeCargoCapacity(int cargoCapacity)
+        {
+            CargoCapacity = cargoCapacity;
+        }
     }
 }

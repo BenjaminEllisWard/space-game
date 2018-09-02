@@ -153,6 +153,11 @@ namespace SpaceGame
             return Cargo.GetCargoCapacity();
         }
 
+        public void ChangeCargoCapacity(int cargoCapacity)
+        {
+            Cargo.ChangeCargoCapacity(cargoCapacity);
+        }
+
         internal int GetCargoWeight()
         {
             return Cargo.GetCargoWeight();
@@ -198,6 +203,11 @@ namespace SpaceGame
         public void CheckCargo()
         {
             Cargo.CheckCargo();
+        }
+
+        public void ChangeFuelCapacity(int fuelCapacity)
+        {
+            FuelCapacity = fuelCapacity;
         }
 
         // argument is positive when buying fuel, negative when traveling.

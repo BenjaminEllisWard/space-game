@@ -71,6 +71,7 @@ namespace SpaceGame
             Console.WriteLine("1 = Earth");
             Console.WriteLine("2 = Alpha Centauri");
             Console.WriteLine("3 = Mystery Planet");
+            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor");
             Console.WriteLine();
 
             Planet destination = new Planet();
@@ -87,6 +88,9 @@ namespace SpaceGame
                     break;
                 case 3:
                     destination = MysteryPlanet;
+                    break;
+                case 4:
+                    destination = ShipGarage;
                     break;
                 default:
                     Console.WriteLine("You must pick a valid destination.");
@@ -139,30 +143,38 @@ namespace SpaceGame
 
         private void BuyMenu()
         {
-            Console.WriteLine();
-            Console.WriteLine("What would you like to buy?");
-            Console.WriteLine($"1 = {MyShip.GetLocation()} item: 175 credits / each"); // automatically names item in form "{location} + item"
-            Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
-            Console.WriteLine();
-            try
+            if (MyShip.GetLocation() == "Easy Eddie's InterGalactic Garage and Massage Parlor")
             {
-                switch (int.Parse(Console.ReadLine()))
-                {
-                    case 1:
-                        BuyItem();
-                        break;
-                    case 2:
-                        BuyFuel();
-                        break;
-                    default:
-                        tradeError();
-                        break;
-                }
-                Console.WriteLine();
+                BuyShip();
             }
-            catch (Exception)
+            else
             {
-                tradeError();
+                Console.WriteLine();
+                Console.WriteLine("What would you like to buy?");
+                // automatically names item in form "{location} + item"
+                Console.WriteLine($"1 = {MyShip.GetLocation()} item: 175 credits / each");
+                Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
+                Console.WriteLine();
+                try
+                {
+                    switch (int.Parse(Console.ReadLine()))
+                    {
+                        case 1:
+                            BuyItem();
+                            break;
+                        case 2:
+                            BuyFuel();
+                            break;
+                        default:
+                            tradeError();
+                            break;
+                    }
+                    Console.WriteLine();
+                }
+                catch (Exception)
+                {
+                    tradeError();
+                }
             }
         }
 
@@ -241,81 +253,78 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Select items 1 - 3, or press 4 to do something");
             Console.WriteLine();
-            //shipSelector();
+            shipSelector();
         }
 
-        //private void shipSelector()
-        //{
-        //    try
-        //    {
-        //        int option = int.Parse(Console.ReadLine());
-        //        if (option == 1 && credits >= 10)
-        //        {
-        //            if (cargoWeight > 200)
-        //            {
-        //                Console.WriteLine();
-        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-        //                Console.WriteLine();
-        //            }
-        //            else
-        //            {
-        //                ship = 1;
-        //                fuel = 100;
-        //                fuelCapacity = 100;
-        //                cargoCapacity = 200;
-        //                credits -= 10;
-        //                Console.WriteLine();
-        //                Console.WriteLine("You are now the proud owner of a helium balloon.");
-        //            }
-        //        }
-        //        else if (option == 2 && credits >= 4200)
-        //        {
-        //            if (cargoWeight > 3000)
-        //            {
-        //                Console.WriteLine();
-        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-        //                Console.WriteLine();
-        //            }
-        //            else
-        //            {
-        //                ship = 2;
-        //                fuel = 1500;
-        //                fuelCapacity = 1500;
-        //                cargoCapacity = 3000;
-        //                credits -= 4200;
-        //                Console.WriteLine();
-        //                Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
-        //            }
-        //        }
-        //        else if (option == 3 && credits >= 15000)
-        //        {
-        //            if (cargoWeight > 20000)
-        //            {
-        //                Console.WriteLine();
-        //                Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
-        //                Console.WriteLine();
-        //            }
-        //            else
-        //            {
-        //                ship = 3;
-        //                fuel = 999999999;
-        //                fuelCapacity = 999999999;
-        //                cargoCapacity = 20000;
-        //                credits -= 15000;
-        //                Console.WriteLine();
-        //                Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            mainError();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        mainError();
-        //    }
-        //} // not yet implemented
+        private void shipSelector()
+        {
+            try
+            {
+                int option = int.Parse(Console.ReadLine());
+                if (option == 1 && MyShip.GetCredits() >= 10)
+                {
+                    if (MyShip.GetCargoWeight() > 200)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        MyShip.ChangeFuelCapacity(100);
+                        MyShip.ChangeFuel(100);
+                        MyShip.ChangeCargoCapacity(200);
+                        MyShip.ChangeCredits(-10);
+                        Console.WriteLine();
+                        Console.WriteLine("You are now the proud owner of a helium balloon.");
+                    }
+                }
+                else if (option == 2 && MyShip.GetCredits() >= 4200)
+                {
+                    if (MyShip.GetCargoWeight() > 3000)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        MyShip.ChangeFuelCapacity(1500);
+                        MyShip.ChangeFuel(1500);
+                        MyShip.ChangeCargoCapacity(3000);
+                        MyShip.ChangeCredits(-4200);
+                        Console.WriteLine();
+                        Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
+                    }
+                }
+                else if (option == 3 && MyShip.GetCredits() >= 15000)
+                {
+                    if (MyShip.GetCargoWeight() > 20000)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("You have more cargo than this ship can hold. Go sell some stuff and try again.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        MyShip.ChangeFuelCapacity(9999999);
+                        MyShip.ChangeFuel(9999999);
+                        MyShip.ChangeCargoCapacity(20000);
+                        MyShip.ChangeCredits(-15000);
+                        Console.WriteLine();
+                        Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
+                    }
+                }
+                else
+                {
+                    MainError();
+                }
+            }
+            catch (Exception)
+            {
+                MainError();
+            }
+        }
 
         private void SellMenu()
         {
