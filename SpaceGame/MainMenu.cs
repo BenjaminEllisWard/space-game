@@ -9,15 +9,6 @@ namespace SpaceGame
     class MainMenu
     {
         private bool Dead = false;
-        private Planet Earth = new Planet();
-        private Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
-        private Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
-        private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
-        private Planet PizzaPlanet = new Planet(20, 30, "Pizza Planet", 3, 1);
-        private Planet OtherPlanet = new Planet(-20, -30, "Other Planet", 3, 1);
-        private Planet OtherPlanet2 = new Planet(-20, 30, "Other Planet", 3, 1);
-        private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet", 3, 1);
-        private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet", 3, 1);
         private Ship MyShip = new Ship();
 
 
@@ -35,7 +26,7 @@ namespace SpaceGame
                 {
                     // TODO check style conventions for spacing in switches.
                     case 1:
-                        MyShip.Travel(PickPlanet());
+                        MyShip.Travel();
                         break;
                     case 2:
                         Trade();
@@ -71,41 +62,7 @@ namespace SpaceGame
             Console.WriteLine();
         }
 
-        // selects destination when traveling
-        private Planet PickPlanet()
-        {
-            Console.Clear();
-            Console.WriteLine("Where would you like to go?");
-            Console.WriteLine("1 = Earth");
-            Console.WriteLine("2 = Alpha Centauri");
-            Console.WriteLine("3 = Mystery Planet");
-            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor");
-            Console.WriteLine();
 
-            Planet destination = new Planet();
-
-            int option = int.Parse(Console.ReadLine());
-
-            switch (option)
-            {
-                case 1:
-                    destination = Earth;
-                    break;
-                case 2:
-                    destination = AlphaCentauri;
-                    break;
-                case 3:
-                    destination = MysteryPlanet;
-                    break;
-                case 4:
-                    destination = ShipGarage;
-                    break;
-                default:
-                    Console.WriteLine("You must pick a valid destination.");
-                    break;
-            }
-            return destination;
-        }
 
 
         // Trade methods
@@ -343,9 +300,9 @@ namespace SpaceGame
             Console.WriteLine("What would you like to sell?");
 
             // the +1/-1 expressions enforce unique economies among three planets.
-            Console.WriteLine($"1 = earthItem for {Earth.GetPrice(MyShip.GetPlanetID())} credits");
-            Console.WriteLine($"2 = acItem for {Earth.GetPrice(MyShip.GetPlanetID() - 1)} credits");
-            Console.WriteLine($"3 = mpItem for {Earth.GetPrice(MyShip.GetPlanetID() + 1)} credits");
+            Console.WriteLine($"1 = earthItem for {MyShip.GetPrice(0)} credits");
+            Console.WriteLine($"2 = acItem for {MyShip.GetPrice(-1)} credits");
+            Console.WriteLine($"3 = mpItem for {MyShip.GetPrice(1)} credits");
             Console.WriteLine();
             try
             {
@@ -371,9 +328,9 @@ namespace SpaceGame
                     if (MyShip.GetItemQuant(0) >= quantity)
                     {
                         // enforces unique economy
-                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID()) * quantity);
+                        MyShip.ChangeCredits(MyShip.GetPrice(0) * quantity);
                         // adds to lifetime earnings to be displayed at end of game
-                        MyShip.ChangeTotalEarned(Earth.GetPrice(0) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
                         // removes sold item(s) from cargo inventory
                         MyShip.ChangeItem(0, -quantity);
                         // removes weight from cargo
@@ -393,8 +350,8 @@ namespace SpaceGame
                     if (MyShip.GetItemQuant(1) >= quantity)
                     {
                         // enforces unique economy. Notice the -1 modifier as opposed to the other cases.
-                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
-                        MyShip.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() - 1) * quantity);
+                        MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
                         MyShip.ChangeItem(1, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
@@ -410,8 +367,8 @@ namespace SpaceGame
                 case 3:
                     if (MyShip.GetItemQuant(2) >= quantity)
                     {
-                        MyShip.ChangeCredits(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
-                        MyShip.ChangeTotalEarned(Earth.GetPrice(MyShip.GetPlanetID() + 1) * quantity);
+                        MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
                         MyShip.ChangeItem(2, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();

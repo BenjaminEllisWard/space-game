@@ -17,6 +17,16 @@ namespace SpaceGame
         public Planet Location = Planet.Earth();
         private Cargo Cargo = new Cargo();
 
+        private Planet Earth = new Planet();
+        private Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
+        private Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
+        private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
+        private Planet PizzaPlanet = new Planet(20, 30, "Pizza Planet", 3, 1);
+        private Planet OtherPlanet = new Planet(-20, -30, "Other Planet", 3, 1);
+        private Planet OtherPlanet2 = new Planet(-20, 30, "Other Planet2", 3, 1);
+        private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet3", 3, 1);
+        private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet4", 3, 1);
+
         // TODO is this the best place for this field?
         private double YearsLeft = 40;
 
@@ -35,8 +45,9 @@ namespace SpaceGame
             this.Location = Planet.Earth();
         }
 
-        public void Travel(Planet destination)
+        public void Travel()
         {
+            Planet destination = PickPlanet();
             // prompts user to input warpFactor.
             int warpFactor = WarpSelector();
 
@@ -46,6 +57,7 @@ namespace SpaceGame
             // Resource burn calculations. Will be used to offer final travel decision to user.
             double fuelReq = Location.DistanceToPlanet(destination) * fuelEfficiency;
             double yearsReq = Location.DistanceToPlanet(destination) / (warpSpeed);
+
 
             // User confirmation based on fuel/time required for trip.
             bool decision = ConfirmTravel(yearsReq, fuelReq);
@@ -73,6 +85,42 @@ namespace SpaceGame
             }
         }
 
+        // selects destination when traveling
+        private Planet PickPlanet()
+        {
+            Console.Clear();
+            Console.WriteLine("Where would you like to go?");
+            Console.WriteLine("1 = Earth");
+            Console.WriteLine("2 = Alpha Centauri");
+            Console.WriteLine("3 = Mystery Planet");
+            Console.WriteLine("4 = Easy Eddie's InterGalactic Garage and Massage Parlor");
+            Console.WriteLine();
+
+            Planet destination = new Planet();
+
+            int option = int.Parse(Console.ReadLine());
+
+            switch (option)
+            {
+                case 1:
+                    destination = Earth;
+                    break;
+                case 2:
+                    destination = AlphaCentauri;
+                    break;
+                case 3:
+                    destination = MysteryPlanet;
+                    break;
+                case 4:
+                    destination = ShipGarage;
+                    break;
+                default:
+                    Console.WriteLine("You must pick a valid destination.");
+                    break;
+            }
+            return destination;
+        }
+
         // Displays travel requirements, user confirms travel.
         private bool ConfirmTravel(double yearsReq, double fuelReq)
         {
@@ -98,7 +146,7 @@ namespace SpaceGame
             }
         }
 
-        private int WarpSelector()
+        public int WarpSelector()
         {
             Console.WriteLine();
             Console.WriteLine("Select your warp speed, Captain.");
@@ -249,6 +297,11 @@ namespace SpaceGame
         internal void ChangeShipName(string shipName)
         {
             ShipName = shipName;
+        }
+
+        public int GetPrice(int modifier)
+        {
+            return Earth.GetPrice(GetPlanetID() + modifier);
         }
     }
 }
