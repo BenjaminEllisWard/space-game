@@ -122,7 +122,7 @@ namespace SpaceGame
             }
             catch (Exception)
             {
-                Program.MainError();
+                MainError();
                 warpSelector();
                 // TODO is there a way to do this block without returning a value?
                 return 1;
@@ -177,6 +177,13 @@ namespace SpaceGame
         public static Ship GetMyShip()
         {
             return new Ship(0, 0, "Your Starter Ship", Planet.Earth());
+        }
+
+        private void MainError()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid Input");
+            Console.WriteLine();
         }
     }
 }
