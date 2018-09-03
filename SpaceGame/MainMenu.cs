@@ -82,7 +82,30 @@ namespace SpaceGame
                         BuyMenu();
                         break;
                     case 2:
-                        SellMenu();
+                        switch (MyShip.GetLocationId())
+                        {
+                            case 1:
+                            case 2:
+                            case 3:
+                                Console.Clear();
+                                SellMenu();
+                                break;
+                            case 4:
+                                Console.Clear();
+                                Console.WriteLine("We don't care about your junk here. Buy a ship or get lost.");
+                                Console.WriteLine();
+                                break;
+                            case 5:
+                            case 6:
+                            case 7:
+                            case 8:
+                            case 9:
+                            case 10:
+                                OpSellMenu();
+                                break;
+
+                        }
+                        // SellMenu();
                         break;
                     case 3:
                         break;
@@ -97,6 +120,139 @@ namespace SpaceGame
             }
         }
 
+        private void OpSellMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine("What would you like to sell?");
+
+            int optionIndex = 1;
+
+            int optionCase1 = 0;
+            int optionCase2 = 0;
+            int optionCase3 = 0;
+            int optionCase4 = 0;
+            int optionCase5 = 0;
+
+            if (MyShip.GetItemQuant(3) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Pizza for {MyShip.GetPrice(0)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(4) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Op1Item for {MyShip.GetPrice(-1)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(5) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Op2Item for {MyShip.GetPrice(1)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(6) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Op3Item for {MyShip.GetPrice(0)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(7) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Op4Item for {MyShip.GetPrice(-1)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+
+            int option = int.Parse(Console.ReadLine());
+
+            // if input matches the corresponding optionCase, statement is executed.
+            if (option == optionCase1 && option != 0)
+            {
+                OpSellItem(3);
+            }
+            else if (option == optionCase2 && option != 0)
+            {
+                OpSellItem(4);
+            }
+            else if (option == optionCase3 && option != 0)
+            {
+                OpSellItem(5);
+            }
+            else if (option == optionCase4 && option != 0)
+            {
+                OpSellItem(6);
+            }
+            else if (option == optionCase5 && option != 0)
+            {
+                OpSellItem(7);
+            }
+            else
+            {
+                Console.WriteLine("You did not pick a valid option.");
+            }
+        }
+         private void OpSellItem(int itemId)
+        {
+            Console.WriteLine("How many would you like to sell?");
+            int quantity = SetQuantity();
+
+            switch (itemId)
+            {
+                // case for earth item
+                case 3:
+                    // case to sell pizza
+                        // enforces unique economy
+                        MyShip.ChangeCredits(MyShip.GetPrice(0) * quantity);
+                        // adds to lifetime earnings to be displayed at end of game
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
+                        // removes sold item(s) from cargo inventory
+                        MyShip.ChangeItem(3, -quantity);
+                        // removes weight from cargo
+                        MyShip.ChangeWeight(150 * -quantity);
+
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    break;
+
+                // case to sell Op1Item item. See above for general case statement notes.
+                case 4:
+                        MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
+                        MyShip.ChangeItem(4, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    break;
+
+                case 5:
+                        MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeItem(5, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    break;
+
+                case 6:
+                        MyShip.ChangeCredits(MyShip.GetPrice(0) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
+                        MyShip.ChangeItem(6, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    break;
+
+                case 7:
+                        MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
+                        MyShip.ChangeItem(7, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    break;
+
+                default:
+                    TradeError();
+                    break;
+            }
+            
+        }
         // used to return integer quantity of an item that will be bought/sold
         private int SetQuantity()
         {

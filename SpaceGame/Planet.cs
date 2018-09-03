@@ -14,8 +14,8 @@ namespace SpaceGame
         public string PlanetName;
         public int ItemID = 0;
         public int PlanetID = 1;
-                                       //  0    1    2    3    4
-        private int[] Price = new int[] { 250, 150, 275, 250, 150 };    // used with PlanetID to enforce unique economies
+                                       //  0    1    2    3    4    5    6    7    8    9    10   11   12   13   14
+        private int[] Price = new int[] { 250, 150, 275, 250, 150, 450, 150, 500, 450, 150, 500, 450, 150, 500, 450 };    // used with PlanetID to enforce unique economies
 
         public Planet()
         {

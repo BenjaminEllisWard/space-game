@@ -20,6 +20,16 @@ namespace SpaceGame
         private int AcItem = 0;
         //itemID = 2
         private int MpItem = 0;
+        //itemID = 3
+        private int Pizza = 0;
+        //itemID = 4
+        private int Op1Item = 0;
+        //itemID = 5
+        private int Op2Item = 0;
+        //itemID = 6
+        private int Op3Item = 0;
+        //itemID = 7
+        private int Op4Item = 0;
 
 
         public Cargo()
@@ -83,6 +93,21 @@ namespace SpaceGame
                 case 2:
                     this.MpItem += quantity;
                     break;
+                case 3:
+                    this.Pizza += quantity;
+                    break;
+                case 4:
+                    this.Op1Item += quantity;
+                    break;
+                case 5:
+                    this.Op2Item += quantity;
+                    break;
+                case 6:
+                    this.Op3Item += quantity;
+                    break;
+                case 7:
+                    this.Op4Item += quantity;
+                    break;
                 default:
                     Console.WriteLine($"Fix this bug: Passed arguments for cargo.ChangeItem(string item, int quantity) were {itemID} and {quantity}.");
                     break;
@@ -110,7 +135,17 @@ namespace SpaceGame
                     return this.AcItem;
                 case 2:
                     return this.MpItem;
-                    // TODO put a number that does not reference any real itemID just to return something for default case. Check for a better way to do this.
+                case 3:
+                    return this.Pizza;
+                case 4:
+                    return this.Op1Item;
+                case 5:
+                    return this.Op2Item;
+                case 6:
+                    return this.Op3Item;
+                case 7:
+                    return this.Op4Item;
+                // TODO put a number that does not reference any real itemID just to return something for default case. Check for a better way to do this.
                 default:
                     return 999;
             }

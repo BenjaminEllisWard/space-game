@@ -17,12 +17,12 @@ namespace SpaceGame
         private Planet Earth = new Planet();
         private Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
         private Planet MysteryPlanet = new Planet(-5, 4, "Mystery Planet", 2, 3);
-        private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 3, 3);
-        private Planet PizzaPlanet = new Planet(20, 30, "Pizza Planet", 3, 1);
-        private Planet OtherPlanet = new Planet(-20, -30, "Other Planet", 3, 1);
-        private Planet OtherPlanet2 = new Planet(-20, 30, "Other Planet2", 3, 1);
-        private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet3", 3, 1);
-        private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet4", 3, 1);
+        private Planet ShipGarage = new Planet(2, 1, "Easy Eddie's InterGalactic Garage and Massage Parlor", 0, 4);
+        private Planet PizzaPlanet = new Planet(20, 30, "Pizza Planet", 3, 6);
+        private Planet OtherPlanet = new Planet(-20, -30, "Other Planet", 4, 7);
+        private Planet OtherPlanet2 = new Planet(-20, 30, "Other Planet2", 5, 8);
+        private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet3", 6, 9);
+        private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet4", 7, 10);
 
         // TODO is this the best place for this field?
         private double YearsLeft = 40;
@@ -318,6 +318,11 @@ namespace SpaceGame
         public string GetLocation()
         {
             return Location.PlanetName;
+        }
+
+        public int GetLocationId()
+        {
+            return Location.PlanetID;
         }
 
         public string GetShipName() => ShipName;
