@@ -16,6 +16,7 @@ namespace SpaceGame
         {
             Console.WriteLine("What's your next move, Captain?");
             Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Dump fuel and kill yourself");
+            Console.WriteLine("6 = Hints");
             Console.WriteLine();
 
             try
@@ -40,6 +41,9 @@ namespace SpaceGame
                     case 5:
                         MyShip.ChangeFuel(-MyShip.GetFuelLevel());
                         break;
+                    case 6:
+                        Hints();
+                        break;
                     default:
                         Console.WriteLine("Invalid input");
                         break;
@@ -50,6 +54,22 @@ namespace SpaceGame
             {
                 Console.WriteLine("Invalid input");
             }
+        }
+
+        private void Hints()
+        {
+            Console.Clear();
+            Console.WriteLine("Hints:");
+            Console.WriteLine();
+            Console.WriteLine("- Items bought on one planet can only be sold for profit on other planets.");
+            Console.WriteLine();
+            Console.WriteLine("- Your fuel tank can be upgraded at Eddie's Garage. You can buy new ships there too.");
+            Console.WriteLine();
+            Console.WriteLine("- The more fuel your ship can hold, the farther you may go. Upgrade your fuel tank");
+            Console.WriteLine("  or buy a better ship to find new planets.");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
         }
 
         private void CheckStatus()
@@ -421,15 +441,37 @@ namespace SpaceGame
             // enforces cargo capacity
             if (MyShip.GetCargoWeight() <= (MyShip.GetCargoCapacity() - (150 * quantity)) && quantity > 0 && quantity <= 10)
             {
-                // deducts credits
-                MyShip.ChangeCredits(-175 * quantity);
-                // first parameter selects location dependent item
-                MyShip.ChangeItem(MyShip.GetItemID(), quantity);
-                // adds weight to cargo
-                MyShip.ChangeWeight(150 * quantity);
-
                 Console.Clear();
-                Console.WriteLine($"Item purchased. Current credits = {MyShip.GetCredits()}.");
+                Console.WriteLine($"This transaction will leave you with {MyShip.GetCredits() - (175 * quantity)} credits. Proceed?");
+                Console.WriteLine();
+                Console.WriteLine("1 = Yes, 2 = No");
+                Console.WriteLine();
+
+                try
+                {
+                    int option = Int32.Parse(Console.ReadLine());
+
+                    if (option == 1)
+                    {
+                        // deducts credits
+                        MyShip.ChangeCredits(-175 * quantity);
+                        // first parameter selects location dependent item
+                        MyShip.ChangeItem(MyShip.GetItemID(), quantity);
+                        // adds weight to cargo
+                        MyShip.ChangeWeight(150 * quantity);
+
+                        Console.Clear();
+                        Console.WriteLine($"Item purchased. Current credits = {MyShip.GetCredits()}.");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                    }
+                }
+                catch (Exception)
+                {
+                    MainError();
+                }
             }
             else
             {
