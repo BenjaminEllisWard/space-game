@@ -26,7 +26,7 @@ namespace SpaceGame
             Console.WriteLine("If you run out of fuel, you die. If you run out of money, you die. If 40 years elapse, you die.");
             Console.WriteLine();
 
-
+            // loop continues game until Dead is returned true.
             while (Dead == false)
             {
                 MainMenu.MainMenuRun();

@@ -17,6 +17,10 @@ namespace SpaceGame
                                        //  0    1    2    3    4    5    6    7    8    9    10   11
         private int[] Price = new int[] { 250, 150, 275, 250, 150, 450, 150, 500, 450, 150, 500, 450 };    // used with PlanetID to enforce unique economies
 
+
+
+        // constructors
+
         public Planet()
         {
             xCoord = 0;
@@ -35,6 +39,10 @@ namespace SpaceGame
             this.PlanetID = planetID;
         }
 
+
+
+        // utility methods
+
         public string GetPlanetName()
         {
             return this.PlanetName;
@@ -49,6 +57,7 @@ namespace SpaceGame
             return distance;
         }
 
+        // used by ship class to return current location name.
         public static Planet Earth()
         {
             return new Planet(0, 0, "Earth", 0, 1);

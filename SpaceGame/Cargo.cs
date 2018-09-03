@@ -14,7 +14,7 @@ namespace SpaceGame
         private int CargoCapacity = 1000;
         private int CargoWeight = 0;
 
-        //itemID = 0 , itemID's used as parameters throughout program
+        //itemID = 0 , itemID's used as parameters throughout project
         private int EarthItem = 0;
         //itemID = 1
         private int AcItem = 0;
@@ -32,9 +32,11 @@ namespace SpaceGame
         private int Op4Item = 0;
 
 
+
+        // constructors
         public Cargo()
         {
-            this.Credits = 1000; //TODO reset to 1000 for actual build
+            this.Credits = 1000;
             this.CargoCapacity = 1000;
             this.CargoWeight = 0;
             this.EarthItem = 0;
@@ -52,25 +54,28 @@ namespace SpaceGame
             this.MpItem = mpItem;
         }
 
-        public int GetCargoCapacity()
-        {
-            return this.CargoCapacity;
-        }
 
-        public int GetCargoWeight()
-        {
-            return this.CargoWeight;
-        }
 
-        public int GetCredits()
-        {
-            return this.Credits;
-        }
+        // cargo checks/sets
+
+        public int GetCargoCapacity() => this.CargoCapacity;
+
+        public int GetCargoWeight() => this.CargoWeight;
+
+        public int GetCredits() => this.Credits;
+
+        public int GetTotalEarned() => this.TotalCreditsEarned;
 
         // if buying, argument is negative int. Positive if selling.
         public void ChangeCredits(int purchasePrice)
         {
             this.Credits += purchasePrice;
+        }
+
+        // if buying, argument is negative int. Positive if selling.
+        internal void ChangeTotalEarned(int v)
+        {
+            this.TotalCreditsEarned += v;
         }
 
         // if buying, argument is positive int. Negative if selling.
@@ -149,6 +154,7 @@ namespace SpaceGame
             
         }
 
+        // used to ensure adequate quantity exists before selling. See MainMenu.SellItem().
         public int GetItemQuant(int itemID)
         {
             switch (itemID)
@@ -174,13 +180,6 @@ namespace SpaceGame
                     return 999;
             }
         }
-
-        internal void ChangeTotalEarned(int v)
-        {
-            this.TotalCreditsEarned += v;
-        }
-
-        public int GetTotalEarned() => TotalCreditsEarned;
 
         internal void ChangeCargoCapacity(int cargoCapacity)
         {

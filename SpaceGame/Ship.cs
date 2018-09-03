@@ -8,11 +8,16 @@ namespace SpaceGame
 {
     public class Ship
     {
+        // ship fields
+
         private int Fuel = 10;
         private int FuelCapacity = 10;
         private string ShipName = "Your Starter Ship";
         public Planet Location = Planet.Earth();
         private Cargo Cargo = new Cargo();
+        private double YearsLeft = 40;
+
+        // instantiated planets
 
         private Planet Earth = new Planet();
         private Planet AlphaCentauri = new Planet(0, -4.367, "Alpha Centauri", 1, 2);
@@ -24,14 +29,15 @@ namespace SpaceGame
         private Planet OtherPlanet3 = new Planet(20, -30, "Other Planet3", 6, 9);
         private Planet OtherPlanet4 = new Planet(45, 45, "Other Planet4", 7, 10);
 
-        // TODO is this the best place for this field?
-        private double YearsLeft = 40;
+
+
+        // constructors
 
         public Ship()
         {
-            Fuel = 10;
-            FuelCapacity = 10;
-            ShipName = "Your Starter Ship";
+            this.Fuel = 10;
+            this.FuelCapacity = 10;
+            this.ShipName = "Your Starter Ship";
         }
 
         public Ship(int fuelCapacity, string shipName, Planet location)
@@ -41,24 +47,102 @@ namespace SpaceGame
             this.Location = Planet.Earth();
         }
 
+
+
+        // ship checks/sets
+
+        public string GetLocation()
+        {
+            return Location.PlanetName;
+        }
+
+        public int GetLocationId()
+        {
+            return Location.PlanetID;
+        }
+
+        public string GetShipName() => ShipName;
+
+        public int GetItemID()
+        {
+            return Location.ItemID;
+        }
+
+        public int GetPlanetID()
+        {
+            return Location.PlanetID;
+        }
+
+        public int GetFuelLevel()
+        {
+            return this.Fuel;
+        }
+
+        public int GetFuelCapacity()
+        {
+            return this.FuelCapacity;
+        }
+
+        public int GetCredits()
+        {
+            return Cargo.GetCredits();
+        }
+
+        public double GetYears() => YearsLeft;
+
+        public void ChangeFuelCapacity(int fuelCapacity)
+        {
+            FuelCapacity = fuelCapacity;
+        }
+
+        // argument is positive when buying fuel, negative when traveling.
+        public void ChangeFuel(int fuel)
+        {
+            this.Fuel += fuel;
+
+            // enforces fuel capacity
+            if (this.Fuel > this.FuelCapacity)
+            {
+                this.Fuel = this.FuelCapacity;
+            }
+        }
+
+        public void ChangeTotalEarned(int v)
+        {
+            Cargo.ChangeTotalEarned(v);
+        }
+
+        internal void ChangeShipName(string shipName)
+        {
+            ShipName = shipName;
+        }
+
+        public int GetTotalEarned()
+        {
+            return Cargo.GetTotalEarned();
+        }
+
+
+
+        // travel methods
+
         public void Travel()
         {
-
-
             // prompts user to input warpFactor.
             int warpFactor = WarpSelector();
 
             Planet destination = PickPlanet(warpFactor);
 
+            // if condition bypasses travel statements if destination is the same as current location.
             if (destination != Location)
             {
                 double fuelEfficiency = FuelEfficiencyCalc(warpFactor);
+                // dynamically calculates speed based on warpFactor.
                 double warpSpeed = Math.Pow(warpFactor, (10.0 / 3.0)) + Math.Pow((10 - warpFactor), (-11.0 / 3.0));
 
                 // Resource burn calculations. Will be used to offer final travel decision to user.
                 double fuelReq = Location.DistanceToPlanet(destination) * fuelEfficiency;
                 double yearsReq = Location.DistanceToPlanet(destination) / (warpSpeed);
-
 
                 // User confirmation based on fuel/time required for trip.
                 bool decision = ConfirmTravel(yearsReq, fuelReq);
@@ -68,7 +152,7 @@ namespace SpaceGame
                     // Subtracts fuel based on distance. fuelEfficiency increases (greater fuel reduction) with warpFactor.
                     this.Fuel -= Convert.ToInt32(Location.DistanceToPlanet(destination) * fuelEfficiency);
 
-                    // Calculations for deducting time off game clock. Deduction increases with warpFactor.
+                    // Calculation for deducting time off game clock. Deduction increases with warpFactor.
                     this.YearsLeft -= Location.DistanceToPlanet(destination) / (warpSpeed);
 
                     this.Location = destination;
@@ -257,7 +341,6 @@ namespace SpaceGame
             Console.WriteLine($"This trip will leave you with:");
             Console.WriteLine($"          Fuel = {(this.Fuel - fuelReq).ToString("F0")}/{this.FuelCapacity}");
             Console.WriteLine($"Years traveled = {(40 - this.YearsLeft + yearsReq).ToString("F2")} years");
-            //Console.WriteLine($"This trip will take {yearsReq} years and cost {fuelReq} fuel.");
             Console.WriteLine();
             Console.WriteLine("Would you like to proceed?");
             Console.WriteLine("1 = Yes");
@@ -309,28 +392,19 @@ namespace SpaceGame
         }
 
         // return value is used to increase fuel required as warpFactor increases.
-        // TODO tune calculation when implementing fuel requirements as stated in requirements.md.
         private double FuelEfficiencyCalc(int warpFactor)
         {
             double efficiency = Math.Pow(warpFactor, 1.5);
             return efficiency;
         }
 
-        public string GetLocation()
-        {
-            return Location.PlanetName;
-        }
 
-        public int GetLocationId()
-        {
-            return Location.PlanetID;
-        }
 
-        public string GetShipName() => ShipName;
+        // cargo checks/sets
 
-        public int GetItemID()
+        public void CheckCargo()
         {
-            return Location.ItemID;
+            Cargo.CheckCargo();
         }
 
         internal int GetCargoCapacity()
@@ -363,48 +437,19 @@ namespace SpaceGame
             Cargo.ChangeWeight(weight);
         }
 
-        public int GetPlanetID()
+        internal int GetItemQuant(int itemID)
         {
-            return Location.PlanetID;
+            return Cargo.GetItemQuant(itemID);
         }
 
-        public int GetFuelLevel()
+
+
+        // utility methods
+
+        // used to vary sell prices for items across locations. Modifier is harcoded in MainMenu.SellMenu() and varies between item types.
+        public int GetPrice(int modifier)
         {
-            return this.Fuel;
-        }
-
-        public int GetFuelCapacity()
-        {
-            return this.FuelCapacity;
-        }
-
-        public int GetCredits()
-        {
-            return Cargo.GetCredits();
-        }
-
-        public double GetYears() => YearsLeft;
-
-        public void CheckCargo()
-        {
-            Cargo.CheckCargo();
-        }
-
-        public void ChangeFuelCapacity(int fuelCapacity)
-        {
-            FuelCapacity = fuelCapacity;
-        }
-
-        // argument is positive when buying fuel, negative when traveling.
-        public void ChangeFuel(int fuel)
-        {
-            this.Fuel += fuel;
-
-            // enforces fuel capacity
-            if (this.Fuel > this.FuelCapacity)
-            {
-                this.Fuel = this.FuelCapacity;
-            }
+            return Earth.GetPrice(GetPlanetID() + modifier);
         }
 
         private void MainError()
@@ -412,31 +457,6 @@ namespace SpaceGame
             Console.WriteLine();
             Console.WriteLine("Invalid Input");
             Console.WriteLine();
-        }
-
-        internal int GetItemQuant(int itemID)
-        {
-            return Cargo.GetItemQuant(itemID);
-        }
-
-        public void ChangeTotalEarned(int v)
-        {
-            Cargo.ChangeTotalEarned(v);
-        }
-
-        internal void ChangeShipName(string shipName)
-        {
-            ShipName = shipName;
-        }
-
-        public int GetPrice(int modifier)
-        {
-            return Earth.GetPrice(GetPlanetID() + modifier);
-        }
-
-        public int GetTotalEarned()
-        {
-            return Cargo.GetTotalEarned();
         }
     }
 }
