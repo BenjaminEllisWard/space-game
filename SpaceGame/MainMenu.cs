@@ -590,23 +590,39 @@ namespace SpaceGame
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine();
                 Console.WriteLine($"1 = Fill her up for {Convert.ToInt16(Math.Ceiling((fuelToMax * 1.5)))} credits.");
-                Console.WriteLine("2 = Ask a random stranger for gas money.");
+                Console.WriteLine("2 = 200 fuel units for 400 credits");
+                Console.WriteLine("3 = Ask a random stranger for gas money.");
 
                 try
                 {
                     int option = Int32.Parse(Console.ReadLine());
 
-                    if (option == 1)
+                    // if condition ensures that user has enough credits to fill up.
+                    if (option == 1 && MyShip.GetCredits() > Convert.ToInt16(Math.Ceiling((fuelToMax * 1.5))))
                     {
-                        MyShip.ChangeCredits(Convert.ToInt16(fuelToMax * 1.5));
+                        MyShip.ChangeCredits(-Convert.ToInt16(fuelToMax * 1.5));
                         MyShip.ChangeFuel(Convert.ToInt16(fuelToMax));
                         Console.Clear();
                         Console.WriteLine("Fuel purchased.");
+                        Console.WriteLine();
+                        Console.WriteLine($"Credits = {MyShip.GetCredits()}");
+                        Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                        Console.WriteLine();
                     }
-
+                    else if (option == 2 && MyShip.GetCredits() > 400)
+                    {
+                        MyShip.ChangeCredits(-400);
+                        MyShip.ChangeFuel(200);
+                        Console.Clear();
+                        Console.WriteLine("Fuel purchased.");
+                        Console.WriteLine();
+                        Console.WriteLine($"Credits = {MyShip.GetCredits()}");
+                        Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                        Console.WriteLine();
+                    }
                     // the block following this if statement gives the user a one in five chance to
                     // increase fuel by one. Useful if stranded, but fuel is greater than zero.
-                    if (option == 2)
+                    else if (option == 3)
                     {
                         bool chance = false;
                         Random rand = new Random();
@@ -630,10 +646,17 @@ namespace SpaceGame
                             Console.WriteLine("Get lost, bum!");
                             Console.WriteLine();
                         }
+                        Console.WriteLine($"Credits = {MyShip.GetCredits()}");
+                        Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                        Console.WriteLine();
                     }
-                    Console.WriteLine($"Credits = {MyShip.GetCredits()}");
-                    Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
-                    Console.WriteLine();
+
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Insufficient funds");
+                        Console.WriteLine();
+                    }
                 }
                 catch (Exception)
                 {
@@ -712,7 +735,7 @@ namespace SpaceGame
             Console.WriteLine("2 = Reasonable Rocketship           \"Comes with a full tank and a 3,000");
             Console.WriteLine("                                     lightyear, one Pu half-life");
             Console.WriteLine("    cost:            4,200           warranty. Conditions apply.\"");
-            Console.WriteLine("    Fuel capacity:   1,500");
+            Console.WriteLine("    Fuel capacity:   1,000");
             Console.WriteLine("    Cargo capacity:  3,000");
             Console.WriteLine();
             Console.WriteLine();
@@ -770,8 +793,8 @@ namespace SpaceGame
                     }
                     else
                     {
-                        MyShip.ChangeFuelCapacity(1500);
-                        MyShip.ChangeFuel(1500);
+                        MyShip.ChangeFuelCapacity(1000);
+                        MyShip.ChangeFuel(1000);
                         MyShip.ChangeCargoCapacity(3000);
                         MyShip.ChangeCredits(-4200);
                         MyShip.ChangeShipName("Reasonable Rocketship");
