@@ -61,6 +61,10 @@ namespace SpaceGame
         private void Hints()
         {
             Console.Clear();
+            Console.WriteLine("You are in space. You are in a spaceship. Go buy things on one planet and sell them on another to make money (credits).");
+            Console.WriteLine("If you run out of fuel, you die. If you run out of money, you die. If 40 years elapse, you die.");
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("Hints:");
             Console.WriteLine();
             Console.WriteLine("- Items bought on one planet can be sold for profit only on other planets.");
@@ -68,12 +72,13 @@ namespace SpaceGame
             Console.WriteLine("- Your fuel tank can be upgraded at Eddie's Garage. You can buy new ships there too.");
             Console.WriteLine();
             Console.WriteLine("- The more fuel your ship can hold, the farther you may go. Upgrade your fuel tank");
-            Console.WriteLine("  or buy a better ship to find new planets.");
+            Console.WriteLine("  or buy a better ship to find new planets. You can also travel faster (warpFactor)"); 
+            Console.WriteLine("  if you have more fuel to burn, so upgrade soon in the game or 40 years will pass quickly.");
             Console.WriteLine();
             Console.WriteLine("- Economies in the far reaches of the universe may not recognize items from early on in the game.");
             Console.WriteLine();
             Console.WriteLine("- If you are stuck with a near empty fuel tank and are low on credits, you can beg for fuel in the");
-            Console.WriteLine("- Buy fuel screen. The chance for a successful beg is 1/3.");
+            Console.WriteLine("  Buy fuel screen. The chance for a successful beg is 1/3.");
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
@@ -592,7 +597,7 @@ namespace SpaceGame
                 Console.WriteLine();
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine();
-                Console.WriteLine($"1 = Fill her up for {Convert.ToInt16(Math.Ceiling((fuelToMax * 1.5)))} credits.");
+                Console.WriteLine($"1 = Fill her up for {Convert.ToInt32(Math.Ceiling((fuelToMax * 1.5)))} credits.");
                 Console.WriteLine("2 = 200 fuel units for 400 credits");
                 Console.WriteLine("3 = Ask a random stranger for gas money.");
 
@@ -601,10 +606,10 @@ namespace SpaceGame
                     int option = Int32.Parse(Console.ReadLine());
 
                     // if condition ensures that user has enough credits to fill up.
-                    if (option == 1 && MyShip.GetCredits() > Convert.ToInt16(Math.Ceiling((fuelToMax * 1.5))))
+                    if (option == 1 && MyShip.GetCredits() > Convert.ToInt32(Math.Ceiling((fuelToMax * 1.5))))
                     {
-                        MyShip.ChangeCredits(-Convert.ToInt16(fuelToMax * 1.5));
-                        MyShip.ChangeFuel(Convert.ToInt16(fuelToMax));
+                        MyShip.ChangeCredits(-Convert.ToInt32(fuelToMax * 1.5));
+                        MyShip.ChangeFuel(Convert.ToInt32(fuelToMax));
                         Console.Clear();
                         Console.WriteLine("Fuel purchased.");
                         Console.WriteLine();
@@ -746,7 +751,7 @@ namespace SpaceGame
             Console.WriteLine("3 = Malaysia Airlines Flight 370    \"The fabric of both space and time are left");
             Console.WriteLine("                                     altered in the wake of this craft's journies");
             Console.WriteLine("    cost:           15,000           into and out of the universe. The passengers");
-            Console.WriteLine("    Fuel capacity:     NaN           on board have been asking repeatedly for");
+            Console.WriteLine("    Fuel capacity: 100,000           on board have been asking repeatedly for");
             Console.WriteLine("    Cargo capacity: 20,000           \"peanuts and a ginger ale,\" whatever that means.\"");
             Console.WriteLine();
             Console.WriteLine();
@@ -815,8 +820,8 @@ namespace SpaceGame
                     }
                     else
                     {
-                        MyShip.ChangeFuelCapacity(9999999);
-                        MyShip.ChangeFuel(9999999);
+                        MyShip.ChangeFuelCapacity(100000);
+                        MyShip.ChangeFuel(100000);
                         MyShip.ChangeCargoCapacity(20000);
                         MyShip.ChangeCredits(-15000);
                         MyShip.ChangeShipName("Malaysia Airlines Flight 370");

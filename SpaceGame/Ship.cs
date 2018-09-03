@@ -394,7 +394,7 @@ namespace SpaceGame
         // return value is used to increase fuel required as warpFactor increases.
         private double FuelEfficiencyCalc(int warpFactor)
         {
-            double efficiency = Math.Pow(warpFactor, 1.7);
+            double efficiency = Math.Pow(warpFactor, 1.95);
             return efficiency;
         }
 
