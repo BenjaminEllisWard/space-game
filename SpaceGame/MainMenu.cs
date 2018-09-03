@@ -15,7 +15,7 @@ namespace SpaceGame
         public void MainMenuRun()
         {
             Console.WriteLine("What's your next move, Captain?");
-            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Dump fuel and kill yourself");
+            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Dump fuel and quit");
             Console.WriteLine("6 = Hints");
             Console.WriteLine();
 
@@ -71,6 +71,9 @@ namespace SpaceGame
             Console.WriteLine("  or buy a better ship to find new planets.");
             Console.WriteLine();
             Console.WriteLine("- Economies in the far reaches of the universe may not recognize items from early on in the game.");
+            Console.WriteLine();
+            Console.WriteLine("- If you are stuck with a near empty fuel tank and are low on credits, you can beg for fuel in the");
+            Console.WriteLine("- Buy fuel screen. The chance for a successful beg is 1/3.");
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
