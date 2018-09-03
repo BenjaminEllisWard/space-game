@@ -620,14 +620,14 @@ namespace SpaceGame
                         Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
                         Console.WriteLine();
                     }
-                    // the block following this if statement gives the user a one in five chance to
+                    // the block following this if statement gives the user a one in three chance to
                     // increase fuel by one. Useful if stranded, but fuel is greater than zero.
                     else if (option == 3)
                     {
                         bool chance = false;
                         Random rand = new Random();
 
-                        if (rand.Next(0, 5) == 0)
+                        if (rand.Next(0, 3) == 0)
                         {
                             chance = true;
                         }
