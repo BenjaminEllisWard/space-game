@@ -179,34 +179,42 @@ namespace SpaceGame
                 optionCase5 = optionIndex++;
             }
 
-            int option = int.Parse(Console.ReadLine());
+            try
+            {
+                int option = int.Parse(Console.ReadLine());
 
-            // if input matches the corresponding optionCase, statement is executed.
-            if (option == optionCase1 && option != 0)
-            {
-                OpSellItem(3);
+                // if input matches the corresponding optionCase, statement is executed.
+                if (option == optionCase1 && option != 0)
+                {
+                    OpSellItem(3);
+                }
+                else if (option == optionCase2 && option != 0)
+                {
+                    OpSellItem(4);
+                }
+                else if (option == optionCase3 && option != 0)
+                {
+                    OpSellItem(5);
+                }
+                else if (option == optionCase4 && option != 0)
+                {
+                    OpSellItem(6);
+                }
+                else if (option == optionCase5 && option != 0)
+                {
+                    OpSellItem(7);
+                }
+                else
+                {
+                    Console.WriteLine("You did not pick a valid option.");
+                }
             }
-            else if (option == optionCase2 && option != 0)
+            catch (Exception)
             {
-                OpSellItem(4);
-            }
-            else if (option == optionCase3 && option != 0)
-            {
-                OpSellItem(5);
-            }
-            else if (option == optionCase4 && option != 0)
-            {
-                OpSellItem(6);
-            }
-            else if (option == optionCase5 && option != 0)
-            {
-                OpSellItem(7);
-            }
-            else
-            {
-                Console.WriteLine("You did not pick a valid option.");
+                MainError();
             }
         }
+
          private void OpSellItem(int itemId)
         {
             Console.WriteLine("How many would you like to sell?");
@@ -215,7 +223,7 @@ namespace SpaceGame
             switch (itemId)
             {
                 // case to sell pizza
-                case 3:
+                case 0:
                     if (MyShip.GetItemQuant(itemId) >= quantity)
                     {
                         // enforces unique economy
@@ -223,7 +231,7 @@ namespace SpaceGame
                         // adds to lifetime earnings to be displayed at end of game
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
                         // removes sold item(s) from cargo inventory
-                        MyShip.ChangeItem(3, -quantity);
+                        MyShip.ChangeItem(0, -quantity);
                         // removes weight from cargo
                         MyShip.ChangeWeight(150 * -quantity);
 
@@ -237,12 +245,12 @@ namespace SpaceGame
                     break;
 
                 // case to sell Op1Item item. See above for general case statement notes.
-                case 4:
+                case 1:
                     if (MyShip.GetItemQuant(itemId) > quantity)
                     {
                         MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
-                        MyShip.ChangeItem(4, -quantity);
+                        MyShip.ChangeItem(1, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
                         Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
@@ -253,44 +261,12 @@ namespace SpaceGame
                     }
                     break;
 
-                case 5:
+                case 2:
                     if (MyShip.GetItemQuant(itemId) > quantity)
                     {
                         MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
-                        MyShip.ChangeItem(5, -quantity);
-                        MyShip.ChangeWeight(150 * -quantity);
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
-                    }
-                    else
-                    {
-                        SellError();
-                    }
-                    break;
-
-                case 6:
-                    if (MyShip.GetItemQuant(itemId) > quantity)
-                    {
-                        MyShip.ChangeCredits(MyShip.GetPrice(0) * quantity);
-                        MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
-                        MyShip.ChangeItem(6, -quantity);
-                        MyShip.ChangeWeight(150 * -quantity);
-                        Console.Clear();
-                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
-                    }
-                    else
-                    {
-                        SellError();
-                    }
-                    break;
-
-                case 7:
-                    if (MyShip.GetItemQuant(itemId) > quantity)
-                    {
-                        MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
-                        MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
-                        MyShip.ChangeItem(7, -quantity);
+                        MyShip.ChangeItem(2, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
                         Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
@@ -311,10 +287,10 @@ namespace SpaceGame
         // used to return integer quantity of an item that will be bought/sold
         private int SetQuantity()
         {
-            int quantity = 0;
-            Console.WriteLine("Enter a number 1 - 10");
-            Console.WriteLine();
-            return quantity = int.Parse(Console.ReadLine());
+                int quantity = 0;
+                Console.WriteLine("Enter a number 1 - 10");
+                Console.WriteLine();
+                return quantity = int.Parse(Console.ReadLine());
         }
 
         private void BuyMenu()
@@ -475,6 +451,7 @@ namespace SpaceGame
             }
             else
             {
+                Console.Clear();
                 WeightError();
             }
         }
@@ -656,21 +633,73 @@ namespace SpaceGame
 
         private void SellMenu()
         {
+            //Console.WriteLine();
+            //Console.WriteLine("What would you like to sell?");
+
+            //// the +1/-1 expressions enforce unique economies among three planets.
+            //Console.WriteLine($"1 = earthItem for {MyShip.GetPrice(0)} credits");
+            //Console.WriteLine($"2 = acItem for {MyShip.GetPrice(-1)} credits");
+            //Console.WriteLine($"3 = mpItem for {MyShip.GetPrice(1)} credits");
+            //Console.WriteLine();
+            //try
+            //{
+            //    SellItem(int.Parse(Console.ReadLine()));
+            //}
+            //catch (Exception)
+            //{
+            //    TradeError();
+            //}
+
             Console.WriteLine();
             Console.WriteLine("What would you like to sell?");
 
-            // the +1/-1 expressions enforce unique economies among three planets.
-            Console.WriteLine($"1 = earthItem for {MyShip.GetPrice(0)} credits");
-            Console.WriteLine($"2 = acItem for {MyShip.GetPrice(-1)} credits");
-            Console.WriteLine($"3 = mpItem for {MyShip.GetPrice(1)} credits");
-            Console.WriteLine();
+            int optionIndex = 1;
+
+            int optionCase1 = 0;
+            int optionCase2 = 0;
+            int optionCase3 = 0;
+
+            if (MyShip.GetItemQuant(0) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Earth Item for {MyShip.GetPrice(0)} credits / each");
+                optionCase1 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(1) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Alpha Centauri Item for {MyShip.GetPrice(-1)} credits / each");
+                optionCase2 = optionIndex++;
+            }
+            if (MyShip.GetItemQuant(2) > 0)
+            {
+                Console.WriteLine($"{optionIndex} = Mystery Planet Item for {MyShip.GetPrice(1)} credits / each");
+                optionCase3 = optionIndex++;
+            }
+
             try
             {
-                SellItem(int.Parse(Console.ReadLine()));
+                int option = int.Parse(Console.ReadLine());
+
+                // if input matches the corresponding optionCase, statement is executed.
+                if (option == optionCase1 && option != 0)
+                {
+                    OpSellItem(0);
+                }
+                else if (option == optionCase2 && option != 0)
+                {
+                    OpSellItem(1);
+                }
+                else if (option == optionCase3 && option != 0)
+                {
+                    OpSellItem(2);
+                }
+                else
+                {
+                    Console.WriteLine("You did not pick a valid option.");
+                }
             }
             catch (Exception)
             {
-                TradeError();
+                MainError();
             }
         }
 
