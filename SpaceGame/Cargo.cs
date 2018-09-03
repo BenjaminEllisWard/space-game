@@ -116,6 +116,7 @@ namespace SpaceGame
 
         public void CheckCargo()
         {
+            Console.Clear();
             Console.WriteLine("Cargo Summary:");
             Console.WriteLine();
             Console.WriteLine($"        Cargo Weight: {this.CargoWeight}/{this.CargoCapacity}");
@@ -123,6 +124,29 @@ namespace SpaceGame
             Console.WriteLine($"         Earth Items: {this.EarthItem}");
             Console.WriteLine($"Alpha Centauri Items: {this.AcItem}");
             Console.WriteLine($"Mystery Planet Items: {this.MpItem}");
+            Console.WriteLine();
+            if (Pizza > 0)
+            {
+            Console.WriteLine($"               Pizza: {this.Pizza}");
+            }
+            if (Op1Item > 0)
+            {
+            Console.WriteLine($"             Op1Item: {this.Op1Item}");
+            }
+            if (Op2Item > 0)
+            {
+            Console.WriteLine($"             Op2Item: {this.Op2Item}");
+            }
+            if (Op3Item > 0)
+            {
+                Console.WriteLine($"             Op3Item: {this.Op3Item}");
+            }
+            if (Op4Item > 0)
+            {
+                Console.WriteLine($"             Op4Item: {this.Op4Item}");
+            }
+            Console.WriteLine();
+            
         }
 
         public int GetItemQuant(int itemID)
