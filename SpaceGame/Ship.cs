@@ -142,47 +142,47 @@ namespace SpaceGame
             // each if statement checks that location is either in range based on current fuel level/years left,
             // and that the requirements do not burn 0 resources (travel to current location). optionIndex then
             // assigns a value (starting at 1) for each case that meets the boolean requirements.
-            if (fuelReq1 < GetFuelLevel() && yearsReq1 < YearsLeft && fuelReq1 != 0)
+            if (fuelReq1 < GetFuelLevel() && fuelReq1 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {Earth.GetPlanetName()}");
                 optionCase1 = optionIndex++;
             }
-            if (fuelReq2 < GetFuelLevel() && yearsReq2 < YearsLeft && fuelReq2 != 0)
+            if (fuelReq2 < GetFuelLevel() && fuelReq2 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {AlphaCentauri.GetPlanetName()}");
                 optionCase2 = optionIndex++;
             }
-            if (fuelReq3 < GetFuelLevel() && yearsReq3 < YearsLeft && fuelReq3 != 0)
+            if (fuelReq3 < GetFuelLevel() && fuelReq3 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {MysteryPlanet.GetPlanetName()}");
                 optionCase3 = optionIndex++;
             }
-            if (fuelReq4 < GetFuelLevel() && yearsReq4 < YearsLeft && fuelReq4 != 0)
+            if (fuelReq4 < GetFuelLevel() && fuelReq4 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {ShipGarage.GetPlanetName()}");
                 optionCase4 = optionIndex++;
             }
-            if (fuelReq5 < GetFuelLevel() && yearsReq5 < YearsLeft && fuelReq5 != 0)
+            if (fuelReq5 < GetFuelLevel() && fuelReq5 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {PizzaPlanet.GetPlanetName()}");
                 optionCase5 = optionIndex++;
             }
-            if (fuelReq6 < GetFuelLevel() && yearsReq6 < YearsLeft && fuelReq6 != 0)
+            if (fuelReq6 < GetFuelLevel() && fuelReq6 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet.GetPlanetName()}");
                 optionCase6 = optionIndex++;
             }
-            if (fuelReq7 < GetFuelLevel() && yearsReq7 < YearsLeft && fuelReq7 != 0)
+            if (fuelReq7 < GetFuelLevel() && fuelReq7 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet2.GetPlanetName()}");
                 optionCase7 = optionIndex++;
             }
-            if (fuelReq8 < GetFuelLevel() && yearsReq8 < YearsLeft && fuelReq8 != 0)
+            if (fuelReq8 < GetFuelLevel() && fuelReq8 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet3.GetPlanetName()}");
                 optionCase8 = optionIndex++;
             }
-            if (fuelReq9 < GetFuelLevel() && yearsReq9 < YearsLeft && fuelReq9 != 0)
+            if (fuelReq9 < GetFuelLevel() && fuelReq9 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet4.GetPlanetName()}");
                 optionCase9 = optionIndex++;
