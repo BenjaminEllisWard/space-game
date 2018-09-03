@@ -301,7 +301,41 @@ namespace SpaceGame
         {
             if (MyShip.GetLocation() == "Easy Eddie's InterGalactic Garage and Massage Parlor")
             {
-                BuyShip();
+                Console.Clear();
+                Console.WriteLine("What would you like to do?");
+                Console.WriteLine("1 = Buy Ship");
+                Console.WriteLine("2 = Buy Fuel");
+                Console.WriteLine("3 = Upgrade fuel tank");
+
+                Console.WriteLine();
+
+                try
+                {
+                    int option = Int32.Parse(Console.ReadLine());
+
+                    switch (option)
+                    {
+                        case 1:
+                            BuyShip();
+                            break;
+                        case 2:
+                            BuyFuel();
+                            break;
+                        case 3:
+                            UpgradeFuelTank();
+                            break;
+                        default:
+                            Console.Clear();
+                            Console.WriteLine("Invalid input");
+                            Console.WriteLine();
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.Clear();
+                    MainError();
+                }
             }
             else
             {
@@ -309,7 +343,7 @@ namespace SpaceGame
                 Console.WriteLine("What would you like to buy?");
                 // automatically names item in form "{location} + item"
                 Console.WriteLine($"1 = {MyShip.GetLocation()} item: 175 credits / each");
-                Console.WriteLine("2 =       Fuel:  75 credits / 250 units");
+                Console.WriteLine("2 = Fuel");
                 Console.WriteLine();
                 try
                 {
@@ -332,6 +366,50 @@ namespace SpaceGame
                     TradeError();
                 }
             }
+        }
+
+        private void UpgradeFuelTank()
+        {
+            Console.Clear();
+            Console.WriteLine("Would you like to add 40 units to your fuel capacity?");
+            Console.WriteLine("Cost = 500 credits");
+            Console.WriteLine();
+            Console.WriteLine("1 = Yes, 2 = No");
+            Console.WriteLine();
+
+            try
+            {
+                int option = Int32.Parse(Console.ReadLine());
+
+                if (option == 1)
+                {
+                    if (MyShip.GetCredits() > 500)
+                    {
+                        MyShip.ChangeFuelCapacity(MyShip.GetFuelCapacity() + 40);
+                        MyShip.ChangeFuel(MyShip.GetFuelCapacity() - MyShip.GetFuelLevel());
+                        MyShip.ChangeCredits(-500);
+
+                        Console.Clear();
+                        Console.WriteLine("Fuel tank upgraded.");
+                        Console.WriteLine();
+                        Console.WriteLine($"Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Insufficient Funds");
+                        Console.WriteLine();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                Console.Clear();
+                MainError();
+            }
+
         }
 
         private void BuyItem()

@@ -34,7 +34,7 @@ namespace SpaceGame
 
         public Cargo()
         {
-            this.Credits = 100000; //TODO reset to 1000 for actual build
+            this.Credits = 1000; //TODO reset to 1000 for actual build
             this.CargoCapacity = 1000;
             this.CargoWeight = 0;
             this.EarthItem = 0;
