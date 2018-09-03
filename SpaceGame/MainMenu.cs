@@ -15,7 +15,7 @@ namespace SpaceGame
         public void MainMenuRun()
         {
             Console.WriteLine("What's your next move, Captain?");
-            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Quit Game");
+            Console.WriteLine("1 = Travel, 2 = Trade, 3 = Status Check, 4 = Cargo Check, 5 = Dump fuel and kill yourself");
             Console.WriteLine();
 
             try
@@ -38,7 +38,7 @@ namespace SpaceGame
                         MyShip.CheckCargo();
                         break;
                     case 5:
-                        Dead = true;
+                        MyShip.ChangeFuel(-MyShip.GetFuelLevel());
                         break;
                     default:
                         Console.WriteLine("Invalid input");
@@ -361,20 +361,69 @@ namespace SpaceGame
 
         private void BuyFuel()
         {
-            if (MyShip.GetFuelLevel() < MyShip.GetFuelCapacity())
+            double fuelToMax = MyShip.GetFuelCapacity() - MyShip.GetFuelLevel();
+
+            if (fuelToMax != 0)
             {
-                MyShip.ChangeCredits(-75);
-                MyShip.ChangeFuel(250); // fuel capacity enforced within Ship.ChangeFuel()
                 Console.Clear();
-                Console.WriteLine("Fuel purchased.");
+                Console.WriteLine($"Your current fuel: {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do?");
+                Console.WriteLine();
+                Console.WriteLine($"1 = Fill her up for {Convert.ToInt16(Math.Ceiling((fuelToMax * 1.5)))} credits.");
+                Console.WriteLine("2 = Ask a random stranger for gas money.");
+
+                try
+                {
+                    int option = Int32.Parse(Console.ReadLine());
+
+                    if (option == 1)
+                    {
+                        MyShip.ChangeCredits(Convert.ToInt16(fuelToMax * 1.5));
+                        MyShip.ChangeFuel(Convert.ToInt16(fuelToMax)); // fuel capacity enforced within Ship.ChangeFuel()
+                        Console.Clear();
+                        Console.WriteLine("Fuel purchased.");
+                    }
+                    if (option == 2)
+                    {
+                        bool chance = false;
+                        Random rand = new Random();
+
+                        if (rand.Next(0, 5) == 0)
+                        {
+                            chance = true;
+                        }
+
+                        if (chance == true)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("A stranger uncomfortably hands you a credit and leaves abruptly. The fuel station");
+                            Console.WriteLine("attendant looks at you funny as you ask for a single credit's worth of fuel.");
+                            Console.WriteLine();
+                            MyShip.ChangeFuel(1);
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Get lost, bum!");
+                            Console.WriteLine();
+                        }
+                    }
+                    Console.WriteLine($"Credits = {MyShip.GetCredits()}");
+                    Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
+                    Console.WriteLine();
+                }
+                catch (Exception)
+                {
+                    MainError();
+                }
             }
             else
             {
                 Console.Clear();
-                Console.WriteLine("You're tank is full");
+                Console.WriteLine("Your tank is full.");
+                Console.WriteLine();
             }
-            Console.WriteLine($"Credits = {MyShip.GetCredits()}");
-            Console.WriteLine($"   Fuel = {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
         }
 
         // not yet implemented
@@ -611,14 +660,21 @@ namespace SpaceGame
 
             if (MyShip.GetFuelLevel() <= 0)
             {
-               dead = true;
+                Console.Clear();
+                Console.WriteLine("You're stranded. Aliens are coming to eat you. Try again.");
+                dead = true;
             }
             if (MyShip.GetCredits() <= 0)
             {
+                Console.Clear();
+                Console.WriteLine("You may have fuel, but you're broke. You are doomed to wander aimlessly about the universe. Try again.");
                 dead = true;
             }
             if (MyShip.GetYears() <= 0)
             {
+                Console.Clear();
+                Console.WriteLine("40 years have passed since you first left Earth. After reflecting on a long, prosperous");
+                Console.WriteLine("career in intergalactic trade, you decide to retire in Florida.");
                 dead = true;
             }
             if (Dead == true)
@@ -627,6 +683,15 @@ namespace SpaceGame
             }
 
             return dead;
+        }
+
+        public void EndScreen()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"         Ending credits: {MyShip.GetCredits()}");
+            Console.WriteLine($"Lifetime credits earned: {MyShip.GetTotalEarned()}");
+            Console.WriteLine($"         Years traveled: {(40 - MyShip.GetYears()).ToString("F2")}");
+            Console.WriteLine();
         }
     }
 }

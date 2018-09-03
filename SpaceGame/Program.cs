@@ -32,6 +32,8 @@ namespace SpaceGame
                 MainMenu.MainMenuRun();
                 Dead = MainMenu.DeathChecker();
             }
+
+            MainMenu.EndScreen();
         }
 
     }

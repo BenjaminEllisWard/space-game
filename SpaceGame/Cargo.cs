@@ -180,6 +180,8 @@ namespace SpaceGame
             this.TotalCreditsEarned += v;
         }
 
+        public int GetTotalEarned() => TotalCreditsEarned;
+
         internal void ChangeCargoCapacity(int cargoCapacity)
         {
             CargoCapacity = cargoCapacity;

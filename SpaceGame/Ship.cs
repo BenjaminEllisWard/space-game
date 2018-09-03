@@ -8,8 +8,8 @@ namespace SpaceGame
 {
     public class Ship
     {
-        private int Fuel = 1000;
-        private int FuelCapacity = 1000;
+        private int Fuel = 10;
+        private int FuelCapacity = 10;
         private string ShipName = "Your Starter Ship";
         public Planet Location = Planet.Earth();
         private Cargo Cargo = new Cargo();
@@ -29,7 +29,8 @@ namespace SpaceGame
 
         public Ship()
         {
-            FuelCapacity = 1000;
+            Fuel = 10;
+            FuelCapacity = 10;
             ShipName = "Your Starter Ship";
         }
 
@@ -431,6 +432,11 @@ namespace SpaceGame
         public int GetPrice(int modifier)
         {
             return Earth.GetPrice(GetPlanetID() + modifier);
+        }
+
+        public int GetTotalEarned()
+        {
+            return Cargo.GetTotalEarned();
         }
     }
 }
