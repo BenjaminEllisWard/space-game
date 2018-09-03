@@ -130,7 +130,6 @@ namespace SpaceGame
                                 break;
 
                         }
-                        // SellMenu();
                         break;
                     case 3:
                         break;
@@ -229,7 +228,7 @@ namespace SpaceGame
             switch (itemId)
             {
                 // case to sell pizza
-                case 0:
+                case 3:
                     if (MyShip.GetItemQuant(itemId) >= quantity)
                     {
                         // enforces unique economy
@@ -237,7 +236,7 @@ namespace SpaceGame
                         // adds to lifetime earnings to be displayed at end of game
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(0) * quantity);
                         // removes sold item(s) from cargo inventory
-                        MyShip.ChangeItem(0, -quantity);
+                        MyShip.ChangeItem(3, -quantity);
                         // removes weight from cargo
                         MyShip.ChangeWeight(150 * -quantity);
 
@@ -251,12 +250,12 @@ namespace SpaceGame
                     break;
 
                 // case to sell Op1Item item. See above for general case statement notes.
-                case 1:
-                    if (MyShip.GetItemQuant(itemId) > quantity)
+                case 4:
+                    if (MyShip.GetItemQuant(itemId) >= quantity)
                     {
                         MyShip.ChangeCredits(MyShip.GetPrice(-1) * quantity);
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(-1) * quantity);
-                        MyShip.ChangeItem(1, -quantity);
+                        MyShip.ChangeItem(4, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
                         Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
@@ -266,13 +265,42 @@ namespace SpaceGame
                         SellError();
                     }
                     break;
-
-                case 2:
-                    if (MyShip.GetItemQuant(itemId) > quantity)
+                case 5:
+                    if (MyShip.GetItemQuant(itemId) >= quantity)
                     {
                         MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
                         MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
-                        MyShip.ChangeItem(2, -quantity);
+                        MyShip.ChangeItem(5, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    }
+                    else
+                    {
+                        SellError();
+                    }
+                    break;
+                case 6:
+                    if (MyShip.GetItemQuant(itemId) >= quantity)
+                    {
+                        MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeItem(6, -quantity);
+                        MyShip.ChangeWeight(150 * -quantity);
+                        Console.Clear();
+                        Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
+                    }
+                    else
+                    {
+                        SellError();
+                    }
+                    break;
+                case 7:
+                    if (MyShip.GetItemQuant(itemId) >= quantity)
+                    {
+                        MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeTotalEarned(MyShip.GetPrice(1) * quantity);
+                        MyShip.ChangeItem(7, -quantity);
                         MyShip.ChangeWeight(150 * -quantity);
                         Console.Clear();
                         Console.WriteLine($"Item sold. Credits = {MyShip.GetCredits()}");
@@ -325,15 +353,15 @@ namespace SpaceGame
                 // if input matches the corresponding optionCase, statement is executed.
                 if (option == optionCase1 && option != 0)
                 {
-                    OpSellItem(0);
+                    SellItem(0);
                 }
                 else if (option == optionCase2 && option != 0)
                 {
-                    OpSellItem(1);
+                    SellItem(1);
                 }
                 else if (option == optionCase3 && option != 0)
                 {
-                    OpSellItem(2);
+                    SellItem(2);
                 }
                 else
                 {
@@ -355,7 +383,7 @@ namespace SpaceGame
             switch (action)
             {
                 // case for earth item
-                case 1:
+                case 0:
                     // enforces current existence within cargo inventory
                     if (MyShip.GetItemQuant(0) >= quantity)
                     {
@@ -378,7 +406,7 @@ namespace SpaceGame
                     break;
 
                 // case to sell ac item. See above for general case statement notes.
-                case 2:
+                case 1:
                     if (MyShip.GetItemQuant(1) >= quantity)
                     {
                         // enforces unique economy. Notice the -1 modifier as opposed to the other cases.
@@ -396,7 +424,7 @@ namespace SpaceGame
                     break;
 
                 // case to sell mp item. See above for general case statement notes.
-                case 3:
+                case 2:
                     if (MyShip.GetItemQuant(2) >= quantity)
                     {
                         MyShip.ChangeCredits(MyShip.GetPrice(1) * quantity);

@@ -150,7 +150,7 @@ namespace SpaceGame
                 if (decision == true)
                 {
                     // Subtracts fuel based on distance. fuelEfficiency increases (greater fuel reduction) with warpFactor.
-                    this.Fuel -= Convert.ToInt32(Location.DistanceToPlanet(destination) * fuelEfficiency);
+                    this.Fuel -= Convert.ToInt32(Math.Floor(Location.DistanceToPlanet(destination) * fuelEfficiency));
 
                     // Calculation for deducting time off game clock. Deduction increases with warpFactor.
                     this.YearsLeft -= Location.DistanceToPlanet(destination) / (warpSpeed);
@@ -227,47 +227,47 @@ namespace SpaceGame
             // each if statement checks that location is either in range based on current fuel level/years left,
             // and that the requirements do not burn 0 resources (travel to current location). optionIndex then
             // assigns a value (starting at 1) for each case that meets the boolean requirements.
-            if (fuelReq1 < GetFuelLevel() && fuelReq1 != 0)
+            if (Math.Floor(fuelReq1) < GetFuelLevel() && fuelReq1 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {Earth.GetPlanetName()}");
                 optionCase1 = optionIndex++;
             }
-            if (fuelReq2 < GetFuelLevel() && fuelReq2 != 0)
+            if (Math.Floor(fuelReq2) < GetFuelLevel() && fuelReq2 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {AlphaCentauri.GetPlanetName()}");
                 optionCase2 = optionIndex++;
             }
-            if (fuelReq3 < GetFuelLevel() && fuelReq3 != 0)
+            if (Math.Floor(fuelReq3) < GetFuelLevel() && fuelReq3 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {MysteryPlanet.GetPlanetName()}");
                 optionCase3 = optionIndex++;
             }
-            if (fuelReq4 < GetFuelLevel() && fuelReq4 != 0)
+            if (Math.Floor(fuelReq4) < GetFuelLevel() && fuelReq4 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {ShipGarage.GetPlanetName()}");
                 optionCase4 = optionIndex++;
             }
-            if (fuelReq5 < GetFuelLevel() && fuelReq5 != 0)
+            if (Math.Floor(fuelReq5) < GetFuelLevel() && fuelReq5 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {PizzaPlanet.GetPlanetName()}");
                 optionCase5 = optionIndex++;
             }
-            if (fuelReq6 < GetFuelLevel() && fuelReq6 != 0)
+            if (Math.Floor(fuelReq6) < GetFuelLevel() && fuelReq6 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet.GetPlanetName()}");
                 optionCase6 = optionIndex++;
             }
-            if (fuelReq7 < GetFuelLevel() && fuelReq7 != 0)
+            if (Math.Floor(fuelReq7) < GetFuelLevel() && fuelReq7 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet2.GetPlanetName()}");
                 optionCase7 = optionIndex++;
             }
-            if (fuelReq8 < GetFuelLevel() && fuelReq8 != 0)
+            if (Math.Floor(fuelReq8) < GetFuelLevel() && fuelReq8 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet3.GetPlanetName()}");
                 optionCase8 = optionIndex++;
             }
-            if (fuelReq9 < GetFuelLevel() && fuelReq9 != 0)
+            if (Math.Floor(fuelReq9) < GetFuelLevel() && fuelReq9 != 0)
             {
                 Console.WriteLine($"{optionIndex} = {OtherPlanet4.GetPlanetName()}");
                 optionCase9 = optionIndex++;
@@ -339,7 +339,7 @@ namespace SpaceGame
         private bool ConfirmTravel(double yearsReq, double fuelReq)
         {
             Console.WriteLine($"This trip will leave you with:");
-            Console.WriteLine($"          Fuel = {(this.Fuel - fuelReq).ToString("F0")}/{this.FuelCapacity}");
+            Console.WriteLine($"          Fuel = {Math.Ceiling((this.Fuel - fuelReq)).ToString("F0")}/{this.FuelCapacity}");
             Console.WriteLine($"Years traveled = {(40 - this.YearsLeft + yearsReq).ToString("F2")} years");
             Console.WriteLine();
             Console.WriteLine("Would you like to proceed?");
