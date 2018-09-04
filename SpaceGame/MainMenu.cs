@@ -75,6 +75,8 @@ namespace SpaceGame
             Console.WriteLine("  or buy a better ship to find new planets. You can also travel faster (warpFactor)"); 
             Console.WriteLine("  if you have more fuel to burn, so upgrade soon in the game or 40 years will pass quickly.");
             Console.WriteLine();
+            Console.WriteLine("- It is best to start out traveling at warpFactor = 1 until you get a new ship.");
+            Console.WriteLine();
             Console.WriteLine("- Economies in the far reaches of the universe may not recognize items from early on in the game.");
             Console.WriteLine();
             Console.WriteLine("- If you are stuck with a near empty fuel tank and are low on credits, you can beg for fuel in the");
@@ -788,8 +790,9 @@ namespace SpaceGame
                         MyShip.ChangeCargoCapacity(200);
                         MyShip.ChangeCredits(-10);
                         MyShip.ChangeShipName("A helium baloon");
-                        Console.WriteLine();
+                        Console.Clear();
                         Console.WriteLine("You are now the proud owner of a helium balloon.");
+                        Console.WriteLine();
                     }
                 }
                 else if (option == 2 && MyShip.GetCredits() >= 4200)
@@ -807,8 +810,9 @@ namespace SpaceGame
                         MyShip.ChangeCargoCapacity(3000);
                         MyShip.ChangeCredits(-4200);
                         MyShip.ChangeShipName("Reasonable Rocketship");
-                        Console.WriteLine();
+                        Console.Clear();
                         Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
+                        Console.WriteLine();
                     }
                 }
                 else if (option == 3 && MyShip.GetCredits() >= 25000)
@@ -826,8 +830,9 @@ namespace SpaceGame
                         MyShip.ChangeCargoCapacity(20000);
                         MyShip.ChangeCredits(-25000);
                         MyShip.ChangeShipName("Malaysia Airlines Flight 370");
-                        Console.WriteLine();
+                        Console.Clear();
                         Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
+                        Console.WriteLine();
                     }
                 }
                 else
