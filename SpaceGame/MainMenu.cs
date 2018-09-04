@@ -743,15 +743,15 @@ namespace SpaceGame
             Console.WriteLine("2 = Reasonable Rocketship           \"Comes with a full tank and a 3,000");
             Console.WriteLine("                                     lightyear, one Pu half-life");
             Console.WriteLine("    cost:            4,200           warranty. Conditions apply.\"");
-            Console.WriteLine("    Fuel capacity:   1,000");
+            Console.WriteLine("    Fuel capacity:     350");
             Console.WriteLine("    Cargo capacity:  3,000");
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("3 = Malaysia Airlines Flight 370    \"The fabric of both space and time are left");
             Console.WriteLine("                                     altered in the wake of this craft's journies");
-            Console.WriteLine("    cost:           15,000           into and out of the universe. The passengers");
-            Console.WriteLine("    Fuel capacity: 100,000           on board have been asking repeatedly for");
+            Console.WriteLine("    cost:           25,000           into and out of the universe. The passengers");
+            Console.WriteLine("    Fuel capacity:  50,000           on board have been asking repeatedly for");
             Console.WriteLine("    Cargo capacity: 20,000           \"peanuts and a ginger ale,\" whatever that means.\"");
             Console.WriteLine();
             Console.WriteLine();
@@ -801,7 +801,7 @@ namespace SpaceGame
                     }
                     else
                     {
-                        MyShip.ChangeFuelCapacity(1000);
+                        MyShip.ChangeFuelCapacity(350);
                         MyShip.ChangeFuel(1000);
                         MyShip.ChangeCargoCapacity(3000);
                         MyShip.ChangeCredits(-4200);
@@ -810,7 +810,7 @@ namespace SpaceGame
                         Console.WriteLine("Welcome aboard the Reasonable Rocketship. You got a great deal.");
                     }
                 }
-                else if (option == 3 && MyShip.GetCredits() >= 15000)
+                else if (option == 3 && MyShip.GetCredits() >= 25000)
                 {
                     if (MyShip.GetCargoWeight() > 20000)
                     {
@@ -820,10 +820,10 @@ namespace SpaceGame
                     }
                     else
                     {
-                        MyShip.ChangeFuelCapacity(100000);
-                        MyShip.ChangeFuel(100000);
+                        MyShip.ChangeFuelCapacity(50000);
+                        MyShip.ChangeFuel(50000);
                         MyShip.ChangeCargoCapacity(20000);
-                        MyShip.ChangeCredits(-15000);
+                        MyShip.ChangeCredits(-25000);
                         MyShip.ChangeShipName("Malaysia Airlines Flight 370");
                         Console.WriteLine();
                         Console.WriteLine("You are now Captain of Malaysia Airlines Flight 370. Don't travel to year 2014. They're looking for you there.");
