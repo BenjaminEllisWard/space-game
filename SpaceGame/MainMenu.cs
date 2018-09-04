@@ -84,14 +84,15 @@ namespace SpaceGame
             Console.WriteLine();
         }
 
-        // displays current location, ship name, credits, and fuel.
+        // displays current location, ship name, credits, years left and fuel.
         private void CheckStatus()
         {
             Console.Clear();
-            Console.WriteLine($"Location: {MyShip.GetLocation()}");
-            Console.WriteLine($"    Fuel: {MyShip.GetFuelLevel()}");
-            Console.WriteLine($" Credits: {MyShip.GetCredits()}");
-            Console.WriteLine($"    Ship: {MyShip.GetShipName()}");
+            Console.WriteLine($"      Location: {MyShip.GetLocation()}");
+            Console.WriteLine($"          Fuel: {MyShip.GetFuelLevel()}");
+            Console.WriteLine($"       Credits: {MyShip.GetCredits()}");
+            Console.WriteLine($" Time traveled: {40 - MyShip.GetYears()}");
+            Console.WriteLine($"          Ship: {MyShip.GetShipName()}");
             Console.WriteLine();
         }
 
