@@ -91,9 +91,9 @@ namespace SpaceGame
         {
             Console.Clear();
             Console.WriteLine($"      Location: {MyShip.GetLocation()}");
-            Console.WriteLine($"          Fuel: {MyShip.GetFuelLevel()}");
+            Console.WriteLine($"          Fuel: {MyShip.GetFuelLevel()}/{MyShip.GetFuelCapacity()}");
             Console.WriteLine($"       Credits: {MyShip.GetCredits()}");
-            Console.WriteLine($" Time traveled: {40 - MyShip.GetYears()}");
+            Console.WriteLine($"Years traveled: {40 - MyShip.GetYears()}");
             Console.WriteLine($"          Ship: {MyShip.GetShipName()}");
             Console.WriteLine();
         }
