@@ -36,7 +36,7 @@ namespace SpaceGame
         // constructors
         public Cargo()
         {
-            this.Credits = 100000;
+            this.Credits = 1000;
             this.CargoCapacity = 1000;
             this.CargoWeight = 0;
             this.EarthItem = 0;
